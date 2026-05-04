@@ -22,7 +22,13 @@ echo "==> Fetching tweak hashes"
 : > tweak_hashes.txt
 
 fetch_group Tonwalter888 YouMod
-fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality DontEatMyContent YouGroupSettings YouSpeed
+fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YouGroupSettings YouSpeed
+
+# DontEatMyContent
+if [ "${INPUT_DEMC:-false}" = "true" ]; then
+  fetch_repo therealFoxster DontEatMyContent
+  fetch_repo PoomSmart YTHeaders
+fi
 
 echo "==> Hashes saved"
 cat tweak_hashes.txt
