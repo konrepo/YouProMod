@@ -22,9 +22,13 @@ build_rootless "YTVideoOverlay" "ytvideooverlay.deb"
 build_rootless "YouPiP" "youpip.deb"
 build_rootless "YouMute" "youmute.deb"
 build_rootless "YouChooseQuality" "youchoosequality.deb"
-build_rootless "DontEatMyContent" "donteatmycontent.deb"
 build_rootless "YouGroupSettings" "yougroupsettings.deb"
 build_rootless "YouSpeed" "youspeed.deb"
+
+# DontEatMyContent
+if [ "${INPUT_DEMC:-false}" = "true" ]; then
+  build_rootless "DontEatMyContent" "donteatmycontent.deb"
+fi
 
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 
