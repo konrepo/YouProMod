@@ -1,0 +1,9 @@
+Package: com.youpro.khmerbutton
+Name: KhmerTopButton
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Khmer Top Button
+Maintainer: KonRepo
+Author: KonRepo
+Section: Tweaks
+Depends: mobilesubstrate
