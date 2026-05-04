@@ -17,6 +17,7 @@ build_rootless() {
 }
 
 build_rootless "YouMod" "youmod.deb"
+build_rootless "YTVideoOverlay" "ytvideooverlay.deb"
 
 echo "==> Building KhmerTopButton"
 cd "$ROOT/tweaks/KhmerTopButton"
