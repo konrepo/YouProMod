@@ -8,41 +8,28 @@ build_rootless() {
   local out="$2"
 
   echo "==> Building $dir"
-  cd "$ROOT/$dir"
 
+  pushd "$ROOT/$dir" >/dev/null
   make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+  popd >/dev/null
 
   rm -f "$ROOT/$out"
-  mv packages/*.deb "$ROOT/$out"
+  mv "$ROOT/$dir"/packages/*.deb "$ROOT/$out"
 }
 
 build_rootless "YouMod" "youmod.deb"
 build_rootless "YTVideoOverlay" "ytvideooverlay.deb"
 build_rootless "YouPiP" "youpip.deb"
 
-echo "==> Building KhmerTopButton"
-cd "$ROOT/tweaks/KhmerTopButton"
-make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-rm -f "$ROOT/khmertopbutton.deb"
-mv packages/*.deb "$ROOT/khmertopbutton.deb"
+build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 
 case "${INPUT_YOUPRO_VERSION:-beta3}" in
   beta1)
-    echo "==> Building YouProLangFix"
-    cd "$ROOT/tweaks/YouProLangFix"
-    make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-    rm -f "$ROOT/youprolangfix.deb"
-    mv packages/*.deb "$ROOT/youprolangfix.deb"
+    build_rootless "tweaks/YouProLangFix" "youprolangfix.deb"
     ;;
-
   beta3)
-    echo "==> Building YouProb2LangFix"
-    cd "$ROOT/tweaks/YouProb2LangFix"
-    make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-    rm -f "$ROOT/youprob2langfix.deb"
-    mv packages/*.deb "$ROOT/youprob2langfix.deb"
+    build_rootless "tweaks/YouProb2LangFix" "youprob2langfix.deb"
     ;;
-
   *)
     echo "::error::Invalid INPUT_YOUPRO_VERSION: ${INPUT_YOUPRO_VERSION:-}"
     exit 1
