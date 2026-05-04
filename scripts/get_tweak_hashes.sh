@@ -25,7 +25,7 @@ echo "==> Fetching tweak hashes"
 
 # Core
 fetch_group Tonwalter888 YouMod
-fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YouGroupSettings YouSpeed
+fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YTUHD YouChooseQuality YouGroupSettings YouSpeed
 
 # DontEatMyContent
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
