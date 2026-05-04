@@ -22,6 +22,7 @@ build_rootless "YTVideoOverlay" "ytvideooverlay.deb"
 build_rootless "YouPiP" "youpip.deb"
 build_rootless "YouMute" "youmute.deb"
 build_rootless "YouChooseQuality" "youchoosequality.deb"
+build_rootless "YTUHD" "ytuhd.deb"
 
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 
