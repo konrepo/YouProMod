@@ -3,6 +3,8 @@ set -euo pipefail
 
 ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 
+echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
+
 build_rootless() {
   local dir="$1"
   local out="$2"
