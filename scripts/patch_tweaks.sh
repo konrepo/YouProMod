@@ -23,21 +23,17 @@ patch_once "YouSpeed/Tweak.x" \
   'YTVideoOverlay-YouSpeed-Enabled' \
   's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/'
 
-# YouMute defaults
-patch_once "YouMute/Tweak.x" \
-  'YouMuteKeepMuted' \
-  's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/'
+# YouMute
+echo "==> Patch YouMute default settings"
+[ -f YouMute/Tweak.x ] || { echo "Missing YouMute/Tweak.x"; exit 1; }
+perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/' YouMute/Tweak.x
 
-# YouMute persistent mute
 echo "==> Patch YouMute persistent mute"
+perl -0777 -i -pe 's~%group Muted\n\n%hook YTSingleVideoController\n\n- \(void\)setMuted:\(BOOL\)muted \{\n    %orig\(shouldMute\(\)\);\n\}\n\n%end\n\n%end\n~%group Muted\n\n%hook YTSingleVideoController\n\n- (void)setMuted:(BOOL)muted {\n    %orig(shouldMute());\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n}\n\n- (void)play {\n    %orig;\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n}\n\n%end\n\n%end\n~s' YouMute/Tweak.x
 
-[ -f "YouMute/Tweak.x" ] || { echo "==> Missing YouMute/Tweak.x"; exit 1; }
-
-if grep -q "void)play" YouMute/Tweak.x; then
-  echo "==> Already patched (YouMute persistent mute)"
-else
-  perl -0777 -i -pe 's~%group Muted\n\n%hook YTSingleVideoController\n\n- \(void\)setMuted:\(BOOL\)muted \{\n    %orig\(shouldMute\(\)\);\n\}\n\n%end\n\n%end\n~%group Muted\n\n%hook YTSingleVideoController\n\n- (void)setMuted:(BOOL)muted {\n    %orig(shouldMute());\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n}\n\n- (void)play {\n    %orig;\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n}\n\n%end\n\n%end\n~s' YouMute/Tweak.x
-fi
+echo "==> Verify YouMute patch"
+grep -n "void)play" YouMute/Tweak.x
+grep -n "dispatch_after" YouMute/Tweak.x
 
 # YouChooseQuality
 echo "==> Patch YouChooseQuality defaults"
@@ -101,6 +97,65 @@ if "GestureControls: @YES" not in text and old in text:
     )
     file.write_text(text)
     print("Patched YouMod defaults")
+else:
+    print("Already patched or anchor not found")
+PY
+
+# YouMod Player runtime defaults
+echo "==> Patch YouMod Player runtime defaults"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Player.x")
+if not file.is_file():
+    print("Missing YouMod/Files/Player.x")
+    exit(1)
+
+text = file.read_text()
+old = "%ctor {\n    %init;"
+
+insert = """%ctor {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+        GestureControls: @YES,
+        GestureHUD: @YES,
+    }];
+
+    %init;"""
+
+if "GestureHUD: @YES" not in text and old in text:
+    text = text.replace(old, insert, 1)
+    file.write_text(text)
+    print("Patched YouMod Player runtime defaults")
+else:
+    print("Already patched or anchor not found")
+PY
+
+# YouMod Feed runtime defaults
+echo "==> Patch YouMod Feed runtime defaults"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Feed.x")
+if not file.is_file():
+    print("Missing YouMod/Files/Feed.x")
+    exit(1)
+
+text = file.read_text()
+old = "%ctor {\n    %init;"
+
+insert = """%ctor {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+        HideShortsShelf: @YES,
+    }];
+
+    %init;"""
+
+if "HideShortsShelf: @YES" not in text and old in text:
+    text = text.replace(old, insert, 1)
+    file.write_text(text)
+    print("Patched YouMod Feed runtime defaults")
 else:
     print("Already patched or anchor not found")
 PY
