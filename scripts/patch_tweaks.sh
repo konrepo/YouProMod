@@ -76,14 +76,33 @@ else:
     print("Already patched YouChooseQuality defaults")
 PY
 
-# YouMod Player, force gesture controls ON
-patch_once "YouMod/Files/Player.x" \
-  'GestureControls forced ON' \
-  's/%ctor \{\n/%ctor {\n    \/\/ GestureControls forced ON\n    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:\@\"GestureControls\"];\n\n/'
+# YouMod defaults
+echo "==> Patch YouMod defaults"
 
-# YouMod Feed, force Hide Shorts shelf ON
-patch_once "YouMod/Files/Feed.x" \
-  'HideShortsShelf forced ON' \
-  's/%ctor \{\n/%ctor {\n    \/\/ HideShortsShelf forced ON\n    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:\@\"HideShortsShelf\"];\n\n/'
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Settings.x")
+if not file.is_file():
+    print("Missing YouMod/Files/Settings.x")
+    exit(1)
+
+text = file.read_text()
+old = "OldQualityPicker: @YES,"
+
+if "GestureControls: @YES" not in text and old in text:
+    text = text.replace(
+        old,
+        """OldQualityPicker: @YES,
+        GestureControls: @YES,
+        HideShortsShelf: @YES,
+        GestureHUD: @YES,""",
+        1
+    )
+    file.write_text(text)
+    print("Patched YouMod defaults")
+else:
+    print("Already patched or anchor not found")
+PY
 
 echo "==> Patch step complete"
