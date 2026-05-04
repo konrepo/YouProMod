@@ -1,34 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# YouSpeed Patch
-echo "==> Patch YouSpeed default video overlay enabled"
-[ -f YouSpeed/Tweak.x ] || { echo "Missing YouSpeed/Tweak.x"; exit 1; }
-perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/' YouSpeed/Tweak.x
+patch_once() {
+  local file="$1"
+  local check="$2"
+  local perl_cmd="$3"
 
-# YouMute Patch
-echo "==> Patch YouMute default settings"
-[ -f YouMute/Tweak.x ] || { echo "Missing YouMute/Tweak.x"; exit 1; }
-perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/' YouMute/Tweak.x
+  [ -f "$file" ] || { echo "==> Missing $file"; exit 1; }
 
+  if grep -q "$check" "$file"; then
+    echo "==> Already patched ($file)"
+  else
+    echo "==> Patching $file"
+    perl -0pi -e "$perl_cmd" "$file"
+  fi
+}
+
+echo "==> Applying patches"
+
+# YouSpeed
+patch_once "YouSpeed/Tweak.x" \
+  'YTVideoOverlay-YouSpeed-Enabled' \
+  's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/'
+
+# YouMute defaults
+patch_once "YouMute/Tweak.x" \
+  'YouMuteKeepMuted' \
+  's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/'
+
+# YouMute persistent mute
 echo "==> Patch YouMute persistent mute"
 perl -0777 -i -pe 's~%group Muted\n\n%hook YTSingleVideoController\n\n- \(void\)setMuted:\(BOOL\)muted \{\n    %orig\(shouldMute\(\)\);\n\}\n\n%end\n\n%end\n~%group Muted\n\n%hook YTSingleVideoController\n\n- (void)setMuted:(BOOL)muted {\n    %orig(shouldMute());\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n}\n\n- (void)play {\n    %orig;\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n}\n\n%end\n\n%end\n~s' YouMute/Tweak.x
 
-echo "==> Verify YouMute patch"
-grep -n "void)play" YouMute/Tweak.x
-grep -n "dispatch_after" YouMute/Tweak.x
-
-# YouChooseQuality Patch
+# YouChooseQuality
 echo "==> Patch YouChooseQuality defaults"
 python3 <<'PY'
 from pathlib import Path
 import textwrap
-import sys
 
 file = Path("YouChooseQuality/Settings.x")
 if not file.is_file():
     print("Missing YouChooseQuality/Settings.x")
-    sys.exit(1)
+    exit(1)
 
 text = file.read_text()
 
@@ -49,14 +62,14 @@ if "YCQRegisterDefaults" not in text:
         1
     )
     file.write_text(text)
-    print("Patched YouChooseQuality defaults")
+    print("Patched")
 else:
     print("Already patched")
 PY
 
-# Gonerino Patch
-#echo "==> Patch Gonerino default button visibility"
-#[ -f Gonerino/sources/Tweak.x ] || { echo "Missing Gonerino/sources/Tweak.x"; exit 1; }
-#[ -f Gonerino/sources/Settings.x ] || { echo "Missing Gonerino/sources/Settings.x"; exit 1; }
-#perl -0pi -e 's/\? YES(\s*:\s*\[\[NSUserDefaults standardUserDefaults\] boolForKey:@"GonerinoShowButton"\])/\? NO$1/g' Gonerino/sources/Tweak.x
-#perl -0pi -e 's/\? YES(\s*:\s*\[\[NSUserDefaults standardUserDefaults\] boolForKey:@"GonerinoShowButton"\])/\? NO$1/g' Gonerino/sources/Settings.x
+# YouMod Feed (Hide Shorts shelf ON)
+patch_once "YouMod/Files/Feed.x" \
+  'HideShortsShelf": @YES' \
+  's/%ctor \{\n/%ctor {\n    [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"HideShortsShelf\": \@YES}];\n\n/'
+
+echo "==> Patch step complete"
