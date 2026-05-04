@@ -8,7 +8,7 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 [YouMod](https://github.com/Tonwalter888)
 
-[PoomSmart](https://github.com/PoomSmart/YouMute)
+[PoomSmart](https://github.com/PoomSmart)
 
 **Feel free to fork.**
 
