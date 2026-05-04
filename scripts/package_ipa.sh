@@ -28,6 +28,10 @@ inject_items=(
   "$ROOT/youpip.deb"
   "$ROOT/youmute.deb"
   "$ROOT/youchoosequality.deb"
+  "$ROOT/ytuhd.deb"
+  "$ROOT/yougroupsettings.deb"
+  "$ROOT/youspeed.deb"
+  
   "$YOUPRO_DYLIB"
   "$ROOT/tweaks/YouPro.bundle"
   "$ROOT/khmertopbutton.deb"
