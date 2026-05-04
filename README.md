@@ -1,6 +1,6 @@
 # YouProMod
 
-YouProMod is a customized YouTube mod that combines YouPro with YouMod and additional tweaks to enhance playback, remove ads, and unlock advanced features like PiP, gesture controls, and UI customization
+YouProMod is a customized YouTube mod that combines YouPro with YouMod and additional tweaks to enhance playback, remove ads, and unlock advanced features like PiP, gesture controls, and UI customization.  Feel free to fork.
 
 # Credits
 
@@ -9,8 +9,6 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 [YouMod](https://github.com/Tonwalter888)
 
 [PoomSmart](https://github.com/PoomSmart)
-
-**Feel free to fork.**
 
 # Features Included:
 
