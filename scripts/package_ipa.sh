@@ -24,6 +24,7 @@ YOUPRO_BUNDLE="$ROOT/tweaks/YouPro.bundle"
 
 required_files=(
   "$ROOT/youmod.deb"
+  "$ROOT/ytvideooverlay.deb"
   "$YOUPRO_DYLIB"
   "$YOUPRO_BUNDLE"
   "$ROOT/khmertopbutton.deb"
@@ -39,6 +40,7 @@ done
 
 tweaks="OpenYouTubeSafariExtension.appex"
 tweaks="$tweaks $ROOT/youmod.deb"
+tweaks="$tweaks $ROOT/ytvideooverlay.deb"
 tweaks="$tweaks $YOUPRO_DYLIB"
 tweaks="$tweaks $YOUPRO_BUNDLE"
 tweaks="$tweaks $ROOT/khmertopbutton.deb"
