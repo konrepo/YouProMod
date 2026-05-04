@@ -30,13 +30,16 @@ inject_items=(
   "$ROOT/youchoosequality.deb"
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
-  "$ROOT/donteatmycontent.deb"
 
   "$YOUPRO_DYLIB"
   "$ROOT/tweaks/YouPro.bundle"
   "$ROOT/khmertopbutton.deb"
   "$LANGFIX_DEB"
 )
+
+if [ "${INPUT_DEMC:-false}" = "true" ]; then
+  inject_items+=("$ROOT/donteatmycontent.deb")
+fi
 
 for item in "${inject_items[@]}"; do
   if [[ "$item" != "OpenYouTubeSafariExtension.appex" && ! -e "$item" ]]; then
