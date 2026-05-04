@@ -22,7 +22,7 @@ echo "==> Fetching tweak hashes"
 : > tweak_hashes.txt
 
 fetch_group Tonwalter888 YouMod
-fetch_group PoomSmart YTVideoOverlay YouPiP
+fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality
 
 echo "==> Hashes saved"
 cat tweak_hashes.txt
