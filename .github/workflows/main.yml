@@ -26,11 +26,11 @@ on:
         required: false
         type: boolean        
 
-      ytvid:
-        description: "Integrate YTVideoErrorAlert"
-        default: true
-        required: false
-        type: boolean
+      #ytvid:
+      #  description: "Integrate YTVideoErrorAlert"
+      #  default: true
+      #  required: false
+      #  type: boolean
 
       youpro_version:
         description: "Which YouPro dylib to inject"
