@@ -5,18 +5,24 @@ get_hash() {
   git ls-remote "$1" HEAD | cut -f1
 }
 
+fetch_group() {
+  local owner="$1"; shift
+  for repo in "$@"; do
+    local hash
+    hash=$(get_hash "https://github.com/${owner}/${repo}.git")
+
+    key=$(echo "$repo" | tr '[:upper:]' '[:lower:]')
+
+    echo "$key=$hash" >> "$GITHUB_OUTPUT"
+    echo "$key:$hash" >> tweak_hashes.txt
+  done
+}
+
 echo "==> Fetching tweak hashes"
+: > tweak_hashes.txt
 
-youmod=$(get_hash https://github.com/Tonwalter888/YouMod.git)
-ytvideooverlay=$(get_hash https://github.com/PoomSmart/YTVideoOverlay.git)
-
-echo "youmod=$youmod" >> "$GITHUB_OUTPUT"
-echo "ytvideooverlay=$ytvideooverlay" >> "$GITHUB_OUTPUT"
-
-cat <<EOF > tweak_hashes.txt
-youmod:$youmod
-ytvideooverlay:$ytvideooverlay
-EOF
+fetch_group Tonwalter888 YouMod
+fetch_group PoomSmart YTVideoOverlay YouPiP
 
 echo "==> Hashes saved"
 cat tweak_hashes.txt
