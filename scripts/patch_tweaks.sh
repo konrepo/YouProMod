@@ -30,15 +30,24 @@ patch_once "YouMute/Tweak.x" \
 
 # YouMute persistent mute
 echo "==> Patch YouMute persistent mute"
-perl -0777 -i -pe 's~%group Muted\n\n%hook YTSingleVideoController\n\n- \(void\)setMuted:\(BOOL\)muted \{\n    %orig\(shouldMute\(\)\);\n\}\n\n%end\n\n%end\n~%group Muted\n\n%hook YTSingleVideoController\n\n- (void)setMuted:(BOOL)muted {\n    %orig(shouldMute());\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n}\n\n- (void)play {\n    %orig;\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n}\n\n%end\n\n%end\n~s' YouMute/Tweak.x
+
+[ -f "YouMute/Tweak.x" ] || { echo "==> Missing YouMute/Tweak.x"; exit 1; }
+
+if grep -q "void)play" YouMute/Tweak.x; then
+  echo "==> Already patched (YouMute persistent mute)"
+else
+  perl -0777 -i -pe 's~%group Muted\n\n%hook YTSingleVideoController\n\n- \(void\)setMuted:\(BOOL\)muted \{\n    %orig\(shouldMute\(\)\);\n\}\n\n%end\n\n%end\n~%group Muted\n\n%hook YTSingleVideoController\n\n- (void)setMuted:(BOOL)muted {\n    %orig(shouldMute());\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        %orig(shouldMute());\n    });\n}\n\n- (void)play {\n    %orig;\n\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n\n    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{\n        [self setMuted:shouldMute()];\n    });\n}\n\n%end\n\n%end\n~s' YouMute/Tweak.x
+fi
 
 # YouChooseQuality
 echo "==> Patch YouChooseQuality defaults"
+
 python3 <<'PY'
 from pathlib import Path
 import textwrap
 
 file = Path("YouChooseQuality/Settings.x")
+
 if not file.is_file():
     print("Missing YouChooseQuality/Settings.x")
     exit(1)
@@ -62,12 +71,17 @@ if "YCQRegisterDefaults" not in text:
         1
     )
     file.write_text(text)
-    print("Patched")
+    print("Patched YouChooseQuality defaults")
 else:
-    print("Already patched")
+    print("Already patched YouChooseQuality defaults")
 PY
 
-# YouMod Feed (Hide Shorts shelf ON)
+# YouMod Player, enable gesture controls by default
+patch_once "YouMod/Files/Player.x" \
+  'GestureControls": @YES' \
+  's/%ctor \{\n/%ctor {\n    [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"GestureControls\": \@YES}];\n\n/'
+
+# YouMod Feed, enable Hide Shorts shelf by default
 patch_once "YouMod/Files/Feed.x" \
   'HideShortsShelf": @YES' \
   's/%ctor \{\n/%ctor {\n    [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"HideShortsShelf\": \@YES}];\n\n/'
