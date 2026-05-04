@@ -20,6 +20,7 @@ build_rootless() {
 build_rootless "YouMod" "youmod.deb"
 build_rootless "YTVideoOverlay" "ytvideooverlay.deb"
 build_rootless "YouPiP" "youpip.deb"
+build_rootless "YouMute" "youmute.deb"
 
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 
