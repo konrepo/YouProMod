@@ -14,3 +14,4 @@ clone_repo() {
 }
 
 clone_repo "YouMod" "https://github.com/Tonwalter888/YouMod.git"
+clone_repo "YTVideoOverlay" "https://github.com/PoomSmart/YTVideoOverlay.git"
