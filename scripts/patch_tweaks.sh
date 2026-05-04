@@ -93,6 +93,7 @@ if "GestureControls: @YES" not in text and old in text:
         GestureControls: @YES,
         HideShortsShelf: @YES,
         GestureHUD: @YES,""",
+        HidePaidPromoOverlay: @YES,
         1
     )
     file.write_text(text)
@@ -119,6 +120,7 @@ insert = """%ctor {
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         GestureControls: @YES,
         GestureHUD: @YES,
+        HidePaidPromoOverlay: @YES,
     }];
 
     %init;"""
