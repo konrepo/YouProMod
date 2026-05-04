@@ -5,6 +5,7 @@ ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 VERSION="${INPUT_YOUPRO_VERSION:-beta3}"
 
 echo "==> Preparing tweak injection"
+echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
 
 case "$VERSION" in
   beta1)
@@ -30,16 +31,18 @@ inject_items=(
   "$ROOT/youchoosequality.deb"
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
-
-  "$YOUPRO_DYLIB"
-  "$ROOT/tweaks/YouPro.bundle"
-  "$ROOT/khmertopbutton.deb"
-  "$LANGFIX_DEB"
 )
 
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
   inject_items+=("$ROOT/donteatmycontent.deb")
 fi
+
+inject_items+=(
+  "$ROOT/khmertopbutton.deb"
+  "$LANGFIX_DEB"
+  "$YOUPRO_DYLIB"
+  "$ROOT/tweaks/YouPro.bundle"
+)
 
 for item in "${inject_items[@]}"; do
   if [[ "$item" != "OpenYouTubeSafariExtension.appex" && ! -e "$item" ]]; then
