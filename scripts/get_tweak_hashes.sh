@@ -21,8 +21,8 @@ fetch_group() {
 echo "==> Fetching tweak hashes"
 : > tweak_hashes.txt
 
-fetch_group Tonwalter888 YouMod YouPiP YouMute YouChooseQuality YouGroupSettings YouSpeed
-fetch_group PoomSmart YTVideoOverlay
+fetch_group Tonwalter888 YouMod
+fetch_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YTUHD YouGroupSettings YouSpeed
 
 echo "==> Hashes saved"
 cat tweak_hashes.txt
