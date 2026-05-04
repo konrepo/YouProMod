@@ -4,7 +4,8 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 # Credits
 
-[Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar) for FREE **YouPro-b1/b3** tweak.
+[Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar) for FREE **YouPro-b1/b3**
+
 [YouMod](https://github.com/Tonwalter888)
 
 **Feel free to fork.**
