@@ -10,7 +10,7 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 [PoomSmart](https://github.com/PoomSmart)
 
-# Features Included:
+# Features Included
 
 - YouPro 
 - YouMod
