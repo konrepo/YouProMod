@@ -76,14 +76,14 @@ else:
     print("Already patched YouChooseQuality defaults")
 PY
 
-# YouMod Player, enable gesture controls by default
+# YouMod Player, force gesture controls ON
 patch_once "YouMod/Files/Player.x" \
-  'GestureControls": @YES' \
-  's/%ctor \{\n/%ctor {\n    [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"GestureControls\": \@YES}];\n\n/'
+  'GestureControls forced ON' \
+  's/%ctor \{\n/%ctor {\n    \/\/ GestureControls forced ON\n    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:\@\"GestureControls\"];\n\n/'
 
-# YouMod Feed, enable Hide Shorts shelf by default
+# YouMod Feed, force Hide Shorts shelf ON
 patch_once "YouMod/Files/Feed.x" \
-  'HideShortsShelf": @YES' \
-  's/%ctor \{\n/%ctor {\n    [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"HideShortsShelf\": \@YES}];\n\n/'
+  'HideShortsShelf forced ON' \
+  's/%ctor \{\n/%ctor {\n    \/\/ HideShortsShelf forced ON\n    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:\@\"HideShortsShelf\"];\n\n/'
 
 echo "==> Patch step complete"
