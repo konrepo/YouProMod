@@ -28,6 +28,7 @@ inject_items=(
   "$ROOT/ytvideooverlay.deb"
   "$ROOT/youpip.deb"
   "$ROOT/youmute.deb"
+  "$ROOT/ytuhd.deb"
   "$ROOT/youchoosequality.deb"
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
