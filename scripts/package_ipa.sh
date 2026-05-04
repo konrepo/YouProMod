@@ -26,6 +26,8 @@ inject_items=(
   "$ROOT/youmod.deb"
   "$ROOT/ytvideooverlay.deb"
   "$ROOT/youpip.deb"
+  "$ROOT/youmute.deb"
+  "$ROOT/youchoosequality.deb"
   "$YOUPRO_DYLIB"
   "$ROOT/tweaks/YouPro.bundle"
   "$ROOT/khmertopbutton.deb"
