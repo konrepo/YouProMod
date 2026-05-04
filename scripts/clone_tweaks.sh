@@ -25,7 +25,6 @@ clone_group Tonwalter888 YouMod
 clone_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YouGroupSettings YouSpeed
 
 # DontEatMyContent
-if [ "${INPUT_DEMC:-false}" = "true" ]; then
-  clone_repo "DontEatMyContent" "therealFoxster"
-  clone_repo "YTHeaders" "PoomSmart"
+if [ "${INPUT_DEMC}" = "true" ]; then
+  clone_repo "DontEatMyContent" "https://github.com/therealFoxster/DontEatMyContent.git"
 fi
