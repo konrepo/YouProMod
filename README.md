@@ -12,7 +12,7 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 **Feel free to fork.**
 
-# Features Included But Not Limited To...
+# Features Included:
 
 - YouPro 
 - YouMod
