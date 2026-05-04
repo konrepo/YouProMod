@@ -86,16 +86,14 @@ if not file.is_file():
 text = file.read_text()
 old = "OldQualityPicker: @YES,"
 
-if "GestureControls: @YES" not in text and old in text:
-    text = text.replace(
-        old,
-        """OldQualityPicker: @YES,
+new = """OldQualityPicker: @YES,
         GestureControls: @YES,
         HideShortsShelf: @YES,
-        GestureHUD: @YES,""",
-        HidePaidPromoOverlay: @YES,
-        1
-    )
+        GestureHUD: @YES,
+        HidePaidPromoOverlay: @YES,"""
+
+if "GestureControls: @YES" not in text and old in text:
+    text = text.replace(old, new, 1)
     file.write_text(text)
     print("Patched YouMod defaults")
 else:
@@ -125,7 +123,7 @@ insert = """%ctor {
 
     %init;"""
 
-if "GestureHUD: @YES" not in text and old in text:
+if "HidePaidPromoOverlay: @YES" not in text and old in text:
     text = text.replace(old, insert, 1)
     file.write_text(text)
     print("Patched YouMod Player runtime defaults")
