@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # YouSpeed Patch
-#echo "==> Patch YouSpeed default video overlay enabled"
-#[ -f YouSpeed/Tweak.x ] || { echo "Missing YouSpeed/Tweak.x"; exit 1; }
-#perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/' YouSpeed/Tweak.x
+echo "==> Patch YouSpeed default video overlay enabled"
+[ -f YouSpeed/Tweak.x ] || { echo "Missing YouSpeed/Tweak.x"; exit 1; }
+perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/' YouSpeed/Tweak.x
 
 # YouMute Patch
 echo "==> Patch YouMute default settings"
