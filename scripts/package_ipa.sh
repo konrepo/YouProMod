@@ -31,9 +31,7 @@ inject_items=(
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
   "$ROOT/donteatmycontent.deb"
-)
 
-inject_items=(
   "$YOUPRO_DYLIB"
   "$ROOT/tweaks/YouPro.bundle"
   "$ROOT/khmertopbutton.deb"
