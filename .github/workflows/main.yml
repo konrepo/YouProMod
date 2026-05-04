@@ -119,6 +119,7 @@ jobs:
             YTVideoOverlay
             YouPiP
             YouMute
+            YouChooseQuality
             tweaks/KhmerTopButton
             tweaks/YouProLangFix
             tweaks/YouProb2LangFix
