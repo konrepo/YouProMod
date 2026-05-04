@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
+
 clone_repo() {
   local dir="$1"
   local owner="$2"
@@ -27,4 +29,6 @@ clone_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YouGroupSet
 # DontEatMyContent
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
   clone_group therealFoxster DontEatMyContent
+else
+  echo "==> Skipping DontEatMyContent"
 fi
