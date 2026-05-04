@@ -30,14 +30,10 @@ inject_items=(
   "$ROOT/youchoosequality.deb"
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
+  "$ROOT/donteatmycontent.deb"
 )
 
-# DontEatMyContent
-if [ "${INPUT_DEMC:-false}" = "true" ]; then
-  inject_items+=("$ROOT/donteatmycontent.deb")
-fi
-
-  inject_items=(
+inject_items=(
   "$YOUPRO_DYLIB"
   "$ROOT/tweaks/YouPro.bundle"
   "$ROOT/khmertopbutton.deb"
