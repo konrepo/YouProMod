@@ -9,9 +9,10 @@ clone_repo() {
 
   if [ ! -d "$dir" ]; then
     echo "==> Cloning $dir"
-    git clone --quiet --depth=1 "https://github.com/${owner}/${dir}.git" "$dir"
+    git clone --quiet --depth=1 --recurse-submodules "https://github.com/${owner}/${dir}.git" "$dir"
   else
-    echo "==> $dir already exists, skipping clone"
+    echo "==> $dir already exists, updating submodules"
+    git -C "$dir" submodule update --init --recursive
   fi
 }
 
