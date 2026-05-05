@@ -160,34 +160,4 @@ else:
     print("Already patched or anchor not found")
 PY
 
-# YouGroupSettings - YouPro
-echo "==> Patch YouGroupSettings"
-
-python3 <<'PY'
-from pathlib import Path
-
-file = Path("YouGroupSettings/Tweak.x")
-text = file.read_text()
-
-# Add YouPro constant
-if "static const NSInteger YouPro" not in text:
-    text = text.replace(
-        "static const NSInteger YouMod = 'ytmo';",
-        "static const NSInteger YouMod = 'ytmo';\nstatic const NSInteger YouPro = 999;"
-    )
-
-# Insert YouPro as FIRST item
-if "@(YouPro)" not in text:
-    text = text.replace(
-        "[tweaks addObjectsFromArray:@[",
-        "[tweaks addObjectsFromArray:@[\n            @(YouPro), // YouPro"
-    )
-    print("Inserted YouPro at top")
-else:
-    print("YouPro already exists")
-
-file.write_text(text)
-print("Patched YouGroupSettings YouPro")
-PY
-
 echo "==> Patch step complete"
