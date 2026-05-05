@@ -6,6 +6,32 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
   <img src="tweaks/screen.png" width="600">
 </p>
 
+# How to Build the YouProMod IPA
+
+1. Fork the repository by clicking the **Fork** button in the top-right corner.
+
+2. In your forked repository, go to **Settings → Actions**, and enable **Read and write permissions**.
+
+3. Click **Sync fork**, and if your branch is outdated, select **Update branch**.
+
+4. Navigate to the **Actions** tab in your forked repository and choose **Build YouProMod IPA**.
+
+5. Click the **Run workflow** button on the right-hand side.
+
+6. Obtain a decrypted `.ipa` file *(cannot be provided here due to legal reasons)*.
+
+7. Upload the `.ipa` to a file hosting service such as **filebin.net**, **filemail.com**, **catbox.moe**, or **Dropbox** (recommended).
+
+   • If using Dropbox, change the `dl=0` parameter in the shared link to `dl=1` to make it a direct download link.
+
+8. Paste the **direct download URL** into the required field.
+
+9. Leave all other settings as default, then click **Run workflow** to start the build process.
+
+10. Wait for the workflow to complete.
+
+11. Once finished, download the **YouProMod IPA** from the **Releases** section of your forked repository.
+
 # Credits
 
 [Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar) **YouPro-b1/b3**
