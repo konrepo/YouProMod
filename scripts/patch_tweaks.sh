@@ -86,13 +86,14 @@ if not file.is_file():
 text = file.read_text()
 old = "OldQualityPicker: @YES,"
 
-new = """OldQualityPicker: @YES,
+new = """OldQualityPicker: @NO,
+        ForceMiniPlayer: @YES,
         GestureControls: @YES,
         HideShortsShelf: @YES,
         GestureHUD: @YES,
         HidePaidPromoOverlay: @YES,"""
 
-if "GestureControls: @YES" not in text and old in text:
+if "ForceMiniPlayer: @YES" not in text and old in text:
     text = text.replace(old, new, 1)
     file.write_text(text)
     print("Patched YouMod defaults")
@@ -118,6 +119,7 @@ insert = """%ctor {
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         GestureControls: @YES,
         GestureHUD: @YES,
+        ForceMiniPlayer: @YES,
         HidePaidPromoOverlay: @YES,
     }];
 
