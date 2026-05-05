@@ -160,4 +160,43 @@ else:
     print("Already patched or anchor not found")
 PY
 
+# YouGroupSettings - YouPro 
+echo "==> Patch YouGroupSettings YouPro"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouGroupSettings/Tweak.x")
+if not file.is_file():
+    print("Missing YouGroupSettings/Tweak.x")
+    exit(1)
+
+text = file.read_text()
+
+# Add YouPro constant safely
+if "static const NSInteger YouPro" not in text:
+    insert_point = text.find("static const NSInteger")
+    if insert_point != -1:
+        text = text[:insert_point] + "static const NSInteger YouPro = 999;\n" + text[insert_point:]
+    else:
+        print("Could not find constants section")
+
+# Add YouPro to tweaks
+start = text.find("tweaks = [NSMutableArray new];")
+end = text.find("]];", start)
+
+if start != -1 and end != -1:
+    new_block = """tweaks = [NSMutableArray new];
+        [tweaks addObjectsFromArray:@[
+            @(YouPro), // YouPro
+        ]];"""
+    text = text[:start] + new_block + text[end+3:]
+    print("Replaced tweak list with YouPro only")
+else:
+    print("Could not locate tweak list")
+
+file.write_text(text)
+print("Patched YouGroupSettings YouPro")
+PY
+
 echo "==> Patch step complete"
