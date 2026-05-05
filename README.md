@@ -4,6 +4,10 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 <img src="tweaks/screen.png" width="300">
 
+## 📸 Screenshots
+
+![Preview](tweaks/screen.png)
+
 # Credits
 
 [Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar) **YouPro-b1/b3**
