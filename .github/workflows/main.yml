@@ -195,7 +195,7 @@ jobs:
           #name: YouProMod (${{ inputs.youpro_version }} - ${{ github.run_number }})
           #files: YouProMod-${{ inputs.youpro_version }}-${{ github.run_number }}.ipa
 
-          name: YouProMod ${{ github.run_number }})
+          name: YouProMod ${{ github.run_number }}
           files: YouProMod-${{ github.run_number }}.ipa          
           draft: true
           fail_on_unmatched_files: true
