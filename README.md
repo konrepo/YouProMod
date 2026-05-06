@@ -8,7 +8,6 @@ YouProMod is an open-source customized YouTube mod built on YouMod, offering enh
 # How to Build the YouProMod IPA
 
 1. Fork the repository by clicking the **Fork** button in the top-right corner.
-
 2. In your forked repository, go to **Settings → Actions**, and enable **Read and write permissions**.
 
 3. Click **Sync fork**, and if your branch is outdated, select **Update branch**.
