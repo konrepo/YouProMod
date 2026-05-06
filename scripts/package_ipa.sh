@@ -55,7 +55,7 @@ done
 # this if for YouPro
 #OUTPUT_NAME="YouProMod-${VERSION}-${GITHUB_RUN_NUMBER}.ipa" 
 
-OUTPUT_NAME="YouMod-${GITHUB_RUN_NUMBER}.ipa"
+OUTPUT_NAME="YouProMod-${GITHUB_RUN_NUMBER}.ipa"
 
 echo "==> Injecting:"
 printf '%s\n' "${inject_items[@]}"
