@@ -52,7 +52,10 @@ for item in "${inject_items[@]}"; do
   fi
 done
 
-OUTPUT_NAME="YouProMod-${VERSION}-${GITHUB_RUN_NUMBER}.ipa"
+# this if for YouPro
+#OUTPUT_NAME="YouProMod-${VERSION}-${GITHUB_RUN_NUMBER}.ipa" 
+
+OUTPUT_NAME="YouMod-${GITHUB_RUN_NUMBER}.ipa"
 
 echo "==> Injecting:"
 printf '%s\n' "${inject_items[@]}"
