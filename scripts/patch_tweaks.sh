@@ -202,10 +202,20 @@ patterns = [
 for pattern in patterns:
     text = re.sub(pattern, '', text, flags=re.S)
 
-# Remove now-unused videoID line
+# Keep videoID declarations globally, but silence unused videoID only in Download Manager
 text = text.replace(
-    '    NSString *videoID = YouModVideoIDForPlayer(player);\n',
-    ''
+    'static void YouModShowDownloadManager(YTPlayerViewController *player, UIViewController *presenter, UIView *sender) {\n'
+    '    if (!player) {',
+    'static void YouModShowDownloadManager(YTPlayerViewController *player, UIViewController *presenter, UIView *sender) {\n'
+    '    if (!player) {'
+)
+
+text = text.replace(
+    '    NSString *videoID = YouModVideoIDForPlayer(player);\n'
+    '    NSMutableArray *items = [NSMutableArray array];',
+    '    NSString *videoID = YouModVideoIDForPlayer(player);\n'
+    '    (void)videoID;\n'
+    '    NSMutableArray *items = [NSMutableArray array];'
 )
 
 # Replace title
