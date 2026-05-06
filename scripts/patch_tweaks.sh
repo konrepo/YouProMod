@@ -178,4 +178,39 @@ else:
     print("Already patched or anchor not found")
 PY
 
+# YouMod Download menu - keep only video + audio
+echo "==> Patch YouMod Download menu"
+
+python3 <<'PY'
+from pathlib import Path
+import re
+
+file = Path("YouMod/Files/Download.x")
+if not file.is_file():
+    print("Missing Download.x")
+    exit(1)
+
+text = file.read_text()
+
+# Remove unwanted menu items
+patterns = [
+    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Download captions".*?\]\];',
+    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy diagnostics".*?\]\];',
+    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Save thumbnail".*?\]\];',
+    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy video information".*?\]\];',
+]
+
+for pattern in patterns:
+    text = re.sub(pattern, '', text, flags=re.S)
+
+# Optional: change title to Khmer
+text = text.replace(
+    'YouModPresentMenu(@"Download manager", items, presenter, sender);',
+    'YouModPresentMenu(@"\nខ្មែរ\n", items, presenter, sender);'
+)
+
+file.write_text(text)
+print("Patched Download menu")
+PY
+
 echo "==> Patch step complete"
