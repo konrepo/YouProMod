@@ -26,19 +26,7 @@ build_rootless "YouMute" "youmute.deb"
 build_rootless "YouChooseQuality" "youchoosequality.deb"
 build_rootless "YouGroupSettings" "yougroupsettings.deb"
 build_rootless "YouSpeed" "youspeed.deb"
-
-if [ -f "$ROOT/YTUHD/vendor/libvpx_ios/libvpx.a" ]; then
-  echo "==> Building YTUHD with libvpx"
-  pushd "$ROOT/YTUHD" >/dev/null
-  make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless SIDELOAD=1
-  popd >/dev/null
-
-  rm -f "$ROOT/ytuhd.deb"
-  mv "$ROOT/YTUHD"/packages/*.deb "$ROOT/ytuhd.deb"
-else
-  echo "::warning::Skipping YTUHD because libvpx.a is missing"
-  echo "::warning::Expected: $ROOT/YTUHD/vendor/libvpx_ios/libvpx.a"
-fi
+build_rootless "YTUHD" "ytuhd.deb"
 
 # DontEatMyContent
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
