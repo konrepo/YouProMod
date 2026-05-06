@@ -26,18 +26,13 @@ inject_items=(
   "OpenYouTubeSafariExtension.appex"
   "$ROOT/youmod.deb"
   "$ROOT/ytvideooverlay.deb"
+  "$ROOT/ytuhd.deb"
   "$ROOT/youpip.deb"
   "$ROOT/youmute.deb"
   "$ROOT/youchoosequality.deb"
   "$ROOT/yougroupsettings.deb"
   "$ROOT/youspeed.deb"
 )
-
-if [ -f "$ROOT/ytuhd.deb" ]; then
-  inject_items+=("$ROOT/ytuhd.deb")
-else
-  echo "::warning::Skipping YTUHD because ytuhd.deb was not built"
-fi
 
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
   inject_items+=("$ROOT/donteatmycontent.deb")
