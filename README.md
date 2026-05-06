@@ -1,6 +1,5 @@
 # YouProMod
-
-YouProMod is a customized YouTube mod that combines YouPro with YouMod and additional tweaks to enhance playback, remove ads, and unlock advanced features like PiP, gesture controls, and UI customization.  Feel free to fork.
+YouProMod is an open-source customized YouTube mod built on YouMod, offering enhanced playback, ad removal, a built-in download feature, and advanced options like Picture-in-Picture (PiP), gesture controls, and UI customization—feel free to fork and contribute.
 
 <p align="center">
   <img src="tweaks/screen.png" width="600">
@@ -34,15 +33,12 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 
 # Credits
 
-[Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar) **YouPro-b3**
-
 [YouMod](https://github.com/Tonwalter888)
 
 [PoomSmart](https://github.com/PoomSmart)
 
 # Features Included
 
-- YouPro 
 - YouMod
 - YTUHD
 - YouMute
@@ -50,19 +46,18 @@ YouProMod is a customized YouTube mod that combines YouPro with YouMod and addit
 - YouChooseQuality
 - YouPiP
 - YouGroupSettings
-- YTVideoOverlay
+- YTVideoOverlayin 
 
 ### ✨ Changes
 
-- Combine **YouPro** and **YouMod**
-- Added **YouProLangFix** (English UI support)
-- Improved **file size conversion (MB → GB)**
 - Enabled **Show mute button** and **show speed button** in Video Overlay
 - Enabled **YouChooseQuality** for WiFi, and WiFi w/Airplay to 2160p
-- Add **ខ្មែរ** logo on top bar w/link
+- Add **ខ្មែរ** logo w/flag
 - Enabled **Screen Rotation** in General
 - Patched **YouMute** (persistent mute across feed & playlist playback; default muted on first launch)
-- Enabled Hide Short Feed, Gesture control, and Paid Promotion in **YouMod**
+- Enabled Hide Short Feed, Gesture control, Force MiniPlayer, and Hide Paid Promotion in **YouMod**
+- Disabled Use old quality picker in **YouMod**
+- Remove some items from Downloader **YouMod**
 
 ## Note
 
