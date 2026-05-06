@@ -7,11 +7,15 @@ clone_repo() {
   local dir="$1"
   local owner="$2"
 
-  if [ ! -d "$dir" ]; then
+  if [ ! -d "$dir/.git" ]; then
     echo "==> Cloning $dir"
+    rm -rf "$dir"
     git clone --quiet --depth=1 --recurse-submodules "https://github.com/${owner}/${dir}.git" "$dir"
   else
-    echo "==> $dir already exists, updating submodules"
+    echo "==> $dir already exists, updating repo"
+    git -C "$dir" fetch --depth=1 origin
+    git -C "$dir" reset --hard origin/HEAD
+    git -C "$dir" submodule sync --recursive
     git -C "$dir" submodule update --init --recursive
   fi
 }
