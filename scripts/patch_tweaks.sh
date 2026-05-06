@@ -202,6 +202,12 @@ patterns = [
 for pattern in patterns:
     text = re.sub(pattern, '', text, flags=re.S)
 
+# Remove now-unused videoID line
+text = text.replace(
+    '    NSString *videoID = YouModVideoIDForPlayer(player);\n',
+    ''
+)
+
 text = text.replace(
     'YouModPresentMenu(@"Download manager", items, presenter, sender);',
     'YouModPresentMenu(@"\\nខ្មែរ\\n", items, presenter, sender);'
