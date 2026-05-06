@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUTPUT_NAME="YouProMod-${INPUT_YOUPRO_VERSION}-${GITHUB_RUN_NUMBER}.ipa"
+#OUTPUT_NAME="YouProMod-${INPUT_YOUPRO_VERSION}-${GITHUB_RUN_NUMBER}.ipa"
+OUTPUT_NAME="YouProMod-${GITHUB_RUN_NUMBER}.ipa"
 
 echo "==> Restoring original PlugIns and Extensions"
 
