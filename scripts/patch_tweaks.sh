@@ -206,7 +206,7 @@ for pattern in patterns:
 if 'itemWithTitle:@"ខ្មែរ"' not in text:
     text = text.replace(
         '[items addObject:[YouModMenuItem itemWithTitle:@"Download video"',
-        '[items addObject:[YouModMenuItem itemWithTitle:@"      ខ្មែរ      " subtitle:@"" icon:nil handler:nil]];\n\n'
+        '[items addObject:[YouModMenuItem itemWithTitle:@"🇰🇭  ខ្មែរ" subtitle:@"" icon:nil handler:nil]];\n\n'
         '    [items addObject:[YouModMenuItem itemWithTitle:@"Download video"'
     )
 
