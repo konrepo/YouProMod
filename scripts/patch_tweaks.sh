@@ -202,6 +202,14 @@ patterns = [
 for pattern in patterns:
     text = re.sub(pattern, '', text, flags=re.S)
 
+# Add Khmer header row above Download video
+if 'itemWithTitle:@"ខ្មែរ"' not in text:
+    text = text.replace(
+        '[items addObject:[YouModMenuItem itemWithTitle:@"Download video"',
+        '[items addObject:[YouModMenuItem itemWithTitle:@"ខ្មែរ" subtitle:@"" icon:nil handler:nil]];\n\n'
+        '    [items addObject:[YouModMenuItem itemWithTitle:@"Download video"'
+    )
+
 # Silence unused helper functions after removing menu items
 unused_helpers = [
     "YouModCopyDownloadDiagnostics",
@@ -223,12 +231,6 @@ text = text.replace(
     '    NSString *videoID = YouModVideoIDForPlayer(player);\n'
     '    (void)videoID;\n'
     '    NSMutableArray *items = [NSMutableArray array];'
-)
-
-# Replace title
-text = text.replace(
-    'YouModPresentMenu(@"Download manager", items, presenter, sender);',
-    'YouModPresentMenu(@"\\nខ្មែរ\\n", items, presenter, sender);'
 )
 
 file.write_text(text)
