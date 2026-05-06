@@ -202,14 +202,21 @@ patterns = [
 for pattern in patterns:
     text = re.sub(pattern, '', text, flags=re.S)
 
-# Keep videoID declarations globally, but silence unused videoID only in Download Manager
-text = text.replace(
-    'static void YouModShowDownloadManager(YTPlayerViewController *player, UIViewController *presenter, UIView *sender) {\n'
-    '    if (!player) {',
-    'static void YouModShowDownloadManager(YTPlayerViewController *player, UIViewController *presenter, UIView *sender) {\n'
-    '    if (!player) {'
-)
+# Silence unused helper functions after removing menu items
+unused_helpers = [
+    "YouModCopyDownloadDiagnostics",
+    "YouModDownloadThumbnail",
+    "YouModCopyVideoInfo",
+    "YouModShowCaptionsSheet",
+]
 
+for name in unused_helpers:
+    text = text.replace(
+        f"static void {name}(",
+        f"static __attribute__((unused)) void {name}("
+    )
+
+# Silence unused videoID only in Download Manager
 text = text.replace(
     '    NSString *videoID = YouModVideoIDForPlayer(player);\n'
     '    NSMutableArray *items = [NSMutableArray array];',
