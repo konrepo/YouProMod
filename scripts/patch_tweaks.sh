@@ -192,21 +192,19 @@ if not file.is_file():
 
 text = file.read_text()
 
-# Remove unwanted menu items
 patterns = [
-    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Download captions".*?\]\];',
-    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy diagnostics".*?\]\];',
-    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Save thumbnail".*?\]\];',
-    r'\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy video information".*?\]\];',
+    r'\s*\[items addObject:\[YouModMenuItem itemWithTitle:@"Download captions".*?\]\];',
+    r'\s*\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy diagnostics".*?\]\];',
+    r'\s*\[items addObject:\[YouModMenuItem itemWithTitle:@"Save thumbnail".*?\]\];',
+    r'\s*\[items addObject:\[YouModMenuItem itemWithTitle:@"Copy video information".*?\]\];',
 ]
 
 for pattern in patterns:
     text = re.sub(pattern, '', text, flags=re.S)
 
-# Optional: change title to Khmer
 text = text.replace(
     'YouModPresentMenu(@"Download manager", items, presenter, sender);',
-    'YouModPresentMenu(@"\nខ្មែរ\n", items, presenter, sender);'
+    'YouModPresentMenu(@"\\nខ្មែរ\\n", items, presenter, sender);'
 )
 
 file.write_text(text)
