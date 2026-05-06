@@ -77,6 +77,7 @@ echo "==> Patch YouMod defaults"
 
 python3 <<'PY'
 from pathlib import Path
+import re
 
 file = Path("YouMod/Files/Settings.x")
 if not file.is_file():
@@ -84,21 +85,36 @@ if not file.is_file():
     exit(1)
 
 text = file.read_text()
-old = "OldQualityPicker: @YES,"
 
-new = """OldQualityPicker: @NO,
+# Remove previously injected defaults to avoid duplicate keys
+for key in [
+    "ForceMiniPlayer",
+    "GestureControls",
+    "HideShortsShelf",
+    "GestureHUD",
+    "HidePaidPromoOverlay",
+]:
+    text = re.sub(rf"\n\s*{key}: @YES,", "", text)
+
+# Set OldQualityPicker default OFF
+text = text.replace("OldQualityPicker: @YES,", "OldQualityPicker: @NO,", 1)
+
+# Insert custom defaults after OldQualityPicker
+anchor = "OldQualityPicker: @NO,"
+insert = """OldQualityPicker: @NO,
         ForceMiniPlayer: @YES,
         GestureControls: @YES,
         HideShortsShelf: @YES,
         GestureHUD: @YES,
         HidePaidPromoOverlay: @YES,"""
 
-if "ForceMiniPlayer: @YES" not in text and old in text:
-    text = text.replace(old, new, 1)
+if anchor in text:
+    text = text.replace(anchor, insert, 1)
     file.write_text(text)
     print("Patched YouMod defaults")
 else:
-    print("Already patched or anchor not found")
+    print("Anchor not found")
+    exit(1)
 PY
 
 # YouMod Player runtime defaults
