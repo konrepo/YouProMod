@@ -208,6 +208,7 @@ text = text.replace(
     ''
 )
 
+# Replace title
 text = text.replace(
     'YouModPresentMenu(@"Download manager", items, presenter, sender);',
     'YouModPresentMenu(@"\\nខ្មែរ\\n", items, presenter, sender);'
