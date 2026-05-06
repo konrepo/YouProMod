@@ -32,14 +32,14 @@ on:
       #  required: false
       #  type: boolean
 
-      youpro_version:
-        description: "Which YouPro dylib to inject"
-        default: "beta3"
-        required: true
-        type: choice
-        options:
-          - beta1
-          - beta3
+      #youpro_version:
+      #  description: "Which YouPro dylib to inject"
+      #  default: "beta3"
+      #  required: true
+      #  type: choice
+      #  options:
+      #    - beta1
+      #    - beta3
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -57,7 +57,7 @@ jobs:
       INPUT_IPA_URL: ${{ inputs.ipa_url }}
       INPUT_DISPLAY_NAME: ${{ inputs.display_name }}
       INPUT_BUNDLE_ID: ${{ inputs.bundle_id }}
-      INPUT_YOUPRO_VERSION: ${{ inputs.youpro_version }}
+      #INPUT_YOUPRO_VERSION: ${{ inputs.youpro_version }}
 
     steps:
       - name: Checkout repository
@@ -137,12 +137,12 @@ jobs:
             YouGroupSettings
             YouSpeed
             tweaks/KhmerTopButton
-            tweaks/YouProLangFix
-            tweaks/YouProb2LangFix
-          key: ${{ runner.os }}-youpromod-v27-${{ inputs.youpro_version }}-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
+            #tweaks/YouProLangFix
+            #tweaks/YouProb2LangFix
+          key: ${{ runner.os }}-youpromod-v28-${{ inputs.youpro_version }}-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           restore-keys: |
-            ${{ runner.os }}-youpromod-v27-${{ inputs.youpro_version }}-
-            ${{ runner.os }}-youpromod-v27-
+            ${{ runner.os }}-youpromod-v28-${{ inputs.youpro_version }}-
+            ${{ runner.os }}-youpromod-v28-
 
       - name: Clone tweak repositories
         run: bash scripts/clone_tweaks.sh
