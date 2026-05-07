@@ -28,8 +28,8 @@ clone_group() {
 }
 
 # Repos by owner
-clone_group Tonwalter888 YouMod YTUHD
-clone_group PoomSmart YTVideoOverlay YouPiP YouMute YouChooseQuality YouGroupSettings YouSpeed
+clone_group Tonwalter888 YouMod YTUHD YouMute
+clone_group PoomSmart YTVideoOverlay YouPiP YouChooseQuality YouGroupSettings YouSpeed
 
 # DontEatMyContent
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
