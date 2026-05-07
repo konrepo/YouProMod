@@ -1,5 +1,5 @@
 # YouProMod
-YouProMod is an open-source customized YouTube mod built on YouMod, offering enhanced playback, ad removal, a built-in download feature, and advanced options like Picture-in-Picture (PiP), gesture controls, and UI customization.  Feel free to fork and contribute.
+YouProMod is an open-source customized YouTube mod built on [YouMod](https://github.com/Tonwalter888/YouMod), offering enhanced playback, ad removal, a built-in download feature, and advanced options like Picture-in-Picture (PiP), gesture controls, and UI customization.  Feel free to fork and contribute.
 
 <p align="center">
   <img src="tweaks/screen.png" width="600">
