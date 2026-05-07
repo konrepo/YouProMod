@@ -32,7 +32,7 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 
 # Credits
 
-[YouMod](https://github.com/Tonwalter888)
+[Tonwalter888](https://github.com/Tonwalter888)
 
 [PoomSmart](https://github.com/PoomSmart)
 
