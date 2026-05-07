@@ -28,7 +28,8 @@ clone_group() {
 }
 
 # Repos by owner
-clone_group Tonwalter888 YouMod YTUHD YouMute
+clone_group konrepo YouMute
+clone_group Tonwalter888 YouMod YTUHD
 clone_group PoomSmart YTVideoOverlay YouPiP YouChooseQuality YouGroupSettings YouSpeed
 
 # DontEatMyContent
