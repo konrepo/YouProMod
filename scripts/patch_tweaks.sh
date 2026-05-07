@@ -24,6 +24,15 @@ patch_once "YouSpeed/Tweak.x" \
   's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/'
 
 # YouMute
+echo "==> Patch YouMute default settings"
+[ -f YouMute/Tweak.x ] || { echo "Missing YouMute/Tweak.x"; exit 1; }
+perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/' YouMute/Tweak.x
+
+echo "==> Verify YouMute defaults"
+grep -n "YTVideoOverlay-YouMute-Enabled" YouMute/Tweak.x
+grep -n "YouMuteKeepMuted" YouMute/Tweak.x
+
+# YouMute
 #echo "==> Patch YouMute default settings"
 #[ -f YouMute/Tweak.x ] || { echo "Missing YouMute/Tweak.x"; exit 1; }
 #perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/' YouMute/Tweak.x
