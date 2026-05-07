@@ -130,6 +130,10 @@ static NSArray *KhmerFilterButtons(YTRightNavigationButtons *self, BOOL visibleO
                action:@selector(khmerTopButtonPressed:)
      forControlEvents:UIControlEventTouchUpInside];
 
+    // Disable or Enable  click action
+    button.userInteractionEnabled = NO;
+    button.enabled = NO;
+
     KhmerSetButton(self, button);
 
     YTRightNavigationButtons *rightButtons = [self valueForKey:@"_rightNavigationButtons"];
