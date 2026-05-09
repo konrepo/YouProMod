@@ -24,8 +24,7 @@ echo "==> Fetching tweak hashes"
 : > tweak_hashes.txt
 
 # Core
-fetch_group konrepo YouMute
-fetch_group Tonwalter888 YouMod YTUHD
+fetch_group Tonwalter888 YouMod YTUHD YouMute
 fetch_group PoomSmart YTVideoOverlay YouPiP YouChooseQuality YouGroupSettings YouSpeed
 
 # DontEatMyContent
