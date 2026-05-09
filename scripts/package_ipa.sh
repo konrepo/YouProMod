@@ -2,7 +2,6 @@
 set -euo pipefail
 
 ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
-#VERSION="${INPUT_YOUPRO_VERSION:-beta3}"
 
 echo "==> Preparing tweak injection"
 echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
