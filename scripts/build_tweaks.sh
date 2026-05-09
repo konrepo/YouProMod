@@ -35,18 +35,5 @@ fi
 
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 
-#case "${INPUT_YOUPRO_VERSION:-beta3}" in
-#  beta1)
-#    build_rootless "tweaks/YouProLangFix" "youprolangfix.deb"
-#    ;;
-#  beta3)
-#    build_rootless "tweaks/YouProb2LangFix" "youprob2langfix.deb"
-#    ;;
-#  *)
-#    echo "::error::Invalid INPUT_YOUPRO_VERSION: ${INPUT_YOUPRO_VERSION:-}"
-#    exit 1
-#    ;;
-#esac
-
 echo "==> Built packages"
 ls -lh "$ROOT"/*.deb
