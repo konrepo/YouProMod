@@ -26,21 +26,6 @@ on:
         required: false
         type: boolean        
 
-      #ytvid:
-      #  description: "Integrate YTVideoErrorAlert"
-      #  default: true
-      #  required: false
-      #  type: boolean
-
-      #youpro_version:
-      #  description: "Which YouPro dylib to inject"
-      #  default: "beta3"
-      #  required: true
-      #  type: choice
-      #  options:
-      #    - beta1
-      #    - beta3
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -139,10 +124,8 @@ jobs:
             tweaks/KhmerTopButton
             #tweaks/YouProLangFix
             #tweaks/YouProb2LangFix
-          #key: ${{ runner.os }}-youpromod-v29-${{ inputs.youpro_version }}-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           key: ${{ runner.os }}-youpromod-v46-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           restore-keys: |
-            #${{ runner.os }}-youpromod-v29-${{ inputs.youpro_version }}-
             ${{ runner.os }}-youpromod-v46-
 
       - name: Clone tweak repositories
@@ -162,7 +145,6 @@ jobs:
 
       - name: Verify final IPA
         run: |
-          #OUTPUT_NAME="YouProMod-${INPUT_YOUPRO_VERSION}-${GITHUB_RUN_NUMBER}.ipa"
           OUTPUT_NAME="YouProMod-${GITHUB_RUN_NUMBER}.ipa"
           test -f "$OUTPUT_NAME" || { echo "::error::$OUTPUT_NAME not found"; exit 1; }
           file "$OUTPUT_NAME"
@@ -171,10 +153,6 @@ jobs:
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          # For YouPro
-          #name: YouProMod-${{ inputs.youpro_version }}-${{ github.run_number }}
-          #path: YouProMod-${{ inputs.youpro_version }}-${{ github.run_number }}.ipa
-          
           name: YouProMod ${{ github.run_number }}
           path: YouProMod-${{ github.run_number }}.ipa          
           if-no-files-found: error
@@ -190,11 +168,7 @@ jobs:
       - name: Create draft release
         uses: softprops/action-gh-release@v3
         with:
-          # For YouPro
           tag_name: youpromod-${{ github.run_number }}
-          #name: YouProMod (${{ inputs.youpro_version }} - ${{ github.run_number }})
-          #files: YouProMod-${{ inputs.youpro_version }}-${{ github.run_number }}.ipa
-
           name: YouProMod ${{ github.run_number }}
           files: YouProMod-${{ github.run_number }}.ipa          
           draft: true
