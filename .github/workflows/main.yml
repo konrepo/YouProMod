@@ -42,8 +42,7 @@ jobs:
       INPUT_IPA_URL: ${{ inputs.ipa_url }}
       INPUT_DISPLAY_NAME: ${{ inputs.display_name }}
       INPUT_BUNDLE_ID: ${{ inputs.bundle_id }}
-      #INPUT_YOUPRO_VERSION: ${{ inputs.youpro_version }}
-
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
