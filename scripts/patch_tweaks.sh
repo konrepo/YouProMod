@@ -24,13 +24,165 @@ patch_once "YouSpeed/Tweak.x" \
   's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouSpeed-Enabled\": \@YES}];\n\n/'
 
 # YouMute
-echo "==> Patch YouMute default settings"
+echo "==> Patch YouMute"
 [ -f YouMute/Tweak.x ] || { echo "Missing YouMute/Tweak.x"; exit 1; }
-perl -0pi -e 's/%ctor \{\n/%ctor {\n  [[NSUserDefaults standardUserDefaults] registerDefaults:\@{\@\"YTVideoOverlay-YouMute-Enabled\": \@YES, \@\"YouMuteKeepMuted\": \@YES}];\n\n/' YouMute/Tweak.x
 
-echo "==> Verify YouMute defaults"
+cat > YouMute/Tweak.x <<'EOF'
+#import "../YTVideoOverlay/Header.h"
+#import "../YTVideoOverlay/Init.x"
+#import <YouTubeHeader/QTMIcon.h>
+#import <YouTubeHeader/YTColor.h>
+#import <YouTubeHeader/YTMainAppVideoPlayerOverlayViewController.h>
+#import <YouTubeHeader/YTSingleVideoController.h>
+
+#define TweakKey @"YouMute"
+#define KeepMutedKey @"YouMuteKeepMuted"
+
+@interface YTMainAppControlsOverlayView (YouMute)
+- (void)didPressMute:(id)arg;
+@end
+
+@interface YTInlinePlayerBarContainerView (YouMute)
+- (void)didPressMute:(id)arg;
+@end
+
+static BOOL isMutedTop(YTMainAppControlsOverlayView *self) {
+    YTMainAppVideoPlayerOverlayViewController *c = [self valueForKey:@"_eventsDelegate"];
+    YTSingleVideoController *video = [c valueForKey:@"_currentSingleVideoObservable"];
+    return [video isMuted];
+}
+
+static BOOL isMutedBottom(YTInlinePlayerBarContainerView *self) {
+    YTSingleVideoController *video = [self.delegate valueForKey:@"_currentSingleVideo"];
+    return [video isMuted];
+}
+
+static BOOL shouldMute() {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:KeepMutedKey];
+}
+
+static UIImage *muteImage(BOOL muted) {
+    return [%c(QTMIcon) imageWithName:muted ? @"ic_volume_off" : @"ic_volume_up" color:[%c(YTColor) white1]];
+}
+
+%group Muted
+
+%hook YTSingleVideoController
+
+- (void)setMuted:(BOOL)muted {
+    %orig(muted);
+
+    if (shouldMute() && !muted) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            %orig(YES);
+        });
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            %orig(YES);
+        });
+    }
+}
+
+- (void)play {
+    %orig;
+
+    if (shouldMute()) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setMuted:YES];
+        });
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setMuted:YES];
+        });
+    }
+}
+
+%end
+
+%end
+
+%group Top
+
+%hook YTMainAppControlsOverlayView
+
+- (UIImage *)buttonImage:(NSString *)tweakId {
+    return [tweakId isEqualToString:TweakKey] ? muteImage(isMutedTop(self)) : %orig;
+}
+
+%new(v@:@)
+- (void)didPressMute:(id)arg {
+    YTMainAppVideoPlayerOverlayViewController *c = [self valueForKey:@"_eventsDelegate"];
+    YTSingleVideoController *video = [c valueForKey:@"_currentSingleVideoObservable"];
+
+    BOOL muteStatus = ![video isMuted];
+
+    [[NSUserDefaults standardUserDefaults] setBool:muteStatus forKey:KeepMutedKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    [video setMuted:muteStatus];
+
+    [self.overlayButtons[TweakKey] setImage:muteImage(muteStatus) forState:UIControlStateNormal];
+}
+
+%end
+
+%end
+
+%group Bottom
+
+%hook YTInlinePlayerBarContainerView
+
+- (UIImage *)buttonImage:(NSString *)tweakId {
+    return [tweakId isEqualToString:TweakKey] ? muteImage(isMutedBottom(self)) : %orig;
+}
+
+%new(v@:@)
+- (void)didPressMute:(id)arg {
+    YTSingleVideoController *video = [self.delegate valueForKey:@"_currentSingleVideo"];
+
+    BOOL muteStatus = ![video isMuted];
+
+    [[NSUserDefaults standardUserDefaults] setBool:muteStatus forKey:KeepMutedKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    [video setMuted:muteStatus];
+
+    [self.overlayButtons[TweakKey] setImage:muteImage(muteStatus) forState:UIControlStateNormal];
+}
+
+%end
+
+%end
+
+%ctor {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    if ([defaults objectForKey:KeepMutedKey] == nil) {
+        [defaults setBool:YES forKey:KeepMutedKey];
+        [defaults synchronize];
+    }
+
+    [defaults registerDefaults:@{
+        @"YTVideoOverlay-YouMute-Enabled": @YES,
+        KeepMutedKey: @YES
+    }];
+
+    initYTVideoOverlay(TweakKey, @{
+        AccessibilityLabelKey: @"Mute",
+        SelectorKey: @"didPressMute:",
+        UpdateImageOnVisibleKey: @YES
+    });
+
+    %init(Muted);
+    %init(Top);
+    %init(Bottom);
+}
+EOF
+
+echo "==> Verify YouMute patch"
+grep -n "void)play" YouMute/Tweak.x
 grep -n "YTVideoOverlay-YouMute-Enabled" YouMute/Tweak.x
-grep -n "YouMuteKeepMuted" YouMute/Tweak.x
+grep -n "KeepMutedKey" YouMute/Tweak.x
 
 # YouChooseQuality
 echo "==> Patch YouChooseQuality defaults"
