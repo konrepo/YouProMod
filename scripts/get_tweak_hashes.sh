@@ -34,5 +34,13 @@ else
   echo "==> Skipping DontEatMyContent hash"
 fi
 
+echo "==> Adding local tweak hashes"
+
+if [ -d "tweaks/YouProb2LangFix" ]; then
+  hash=$(find tweaks/YouProb2LangFix -type f -exec sha1sum {} \; | sha1sum | cut -d' ' -f1)
+  echo "youprob2langfix=$hash" >> "$GITHUB_OUTPUT"
+  echo "youprob2langfix:$hash" >> tweak_hashes.txt
+fi
+
 echo "==> Hashes saved"
 cat tweak_hashes.txt
