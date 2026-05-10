@@ -1,5 +1,5 @@
 # YouProMod
-YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](https://github.com/Tonwalter888/YouMod), offering enhanced playback, ad removal, a built-in download feature, and advanced options like Picture-in-Picture (PiP), gesture controls, and UI customization.  Feel free to fork and contribute.
+YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](https://github.com/Tonwalter888/YouMod) and [Alibusut|YouPro](https://t.me/alibusut) offering enhanced playback, ad removal, a built-in download feature, and advanced options like Picture-in-Picture (PiP), gesture controls, and UI customization.  Feel free to fork and contribute.
 
 <p align="center">
   <img src="tweaks/screen.png" width="600">
@@ -36,8 +36,11 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 
 [PoomSmart](https://github.com/PoomSmart)
 
+[Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar)
+
 # Features Included
 
+- YouPro
 - YouMod
 - YTUHD
 - YouMute
@@ -55,6 +58,7 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 - Enabled **Screen Rotation** in General
 - Patched **YouMute** (persistent mute across feed & playlist playback; default muted on first launch)
 - Enabled Hide Short Feed, Gesture control, Force MiniPlayer, and Hide Paid Promotion in **YouMod**
+- Disabled **YouMod** Download Manager
 - Disabled Use old quality picker in **YouMod**
 - Remove some items from Downloader **YouMod**
 
