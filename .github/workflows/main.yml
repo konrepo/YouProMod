@@ -130,9 +130,9 @@ jobs:
             tweaks/KhmerTopButton
             tweaks/YouPro*.dylib
             tweaks/YouProb2LangFix
-          key: ${{ runner.os }}-youpromod-v47-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
+          key: ${{ runner.os }}-youpromod-v48-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           restore-keys: |
-            ${{ runner.os }}-youpromod-v47-
+            ${{ runner.os }}-youpromod-v48-
 
       - name: Clone tweak repositories
         run: bash scripts/clone_tweaks.sh
