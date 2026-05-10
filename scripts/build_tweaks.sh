@@ -34,6 +34,7 @@ if [ "${INPUT_DEMC:-false}" = "true" ]; then
 fi
 
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
+build_rootless "tweaks/YouProb2LangFix" "youprob2langfix.deb"
 
 echo "==> Built packages"
 ls -lh "$ROOT"/*.deb
