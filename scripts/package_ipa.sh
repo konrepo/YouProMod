@@ -5,6 +5,7 @@ ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 
 echo "==> Preparing tweak injection"
 echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
+echo "==> INPUT_YOUPRO_VERSION=${INPUT_YOUPRO_VERSION:-none}"
 
 inject_items=(
   "OpenYouTubeSafariExtension.appex"
@@ -20,6 +21,25 @@ inject_items=(
 
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
   inject_items+=("$ROOT/donteatmycontent.deb")
+fi
+
+if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
+  DYLIB="$ROOT/tweaks/YouPro${INPUT_YOUPRO_VERSION^}.dylib"
+  LANGFIX="$ROOT/tweaks/YouPro${INPUT_YOUPRO_VERSION^}LangFix.deb"
+
+  if [ -f "$DYLIB" ]; then
+    echo "==> Adding YouPro dylib: $DYLIB"
+    inject_items+=("$DYLIB")
+  else
+    echo "::warning::YouPro dylib not found: $DYLIB (skipping)"
+  fi
+
+  if [ -f "$LANGFIX" ]; then
+    echo "==> Adding YouPro LangFix: $LANGFIX"
+    inject_items+=("$LANGFIX")
+  else
+    echo "::warning::YouPro LangFix not found: $LANGFIX (skipping)"
+  fi
 fi
 
 inject_items+=(
