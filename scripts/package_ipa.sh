@@ -24,7 +24,8 @@ if [ "${INPUT_DEMC:-false}" = "true" ]; then
 fi
 
 if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
-  DYLIB="$ROOT/tweaks/YouPro${INPUT_YOUPRO_VERSION^}.dylib"
+  YOUPRO_VERSION_CAP="$(printf '%s' "$INPUT_YOUPRO_VERSION" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')"
+  DYLIB="$ROOT/tweaks/YouPro${YOUPRO_VERSION_CAP}.dylib"
 
   if [ -f "$DYLIB" ]; then
     echo "==> Adding YouPro dylib: $DYLIB"
