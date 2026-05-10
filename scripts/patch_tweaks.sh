@@ -458,4 +458,90 @@ file.write_text(text)
 print("Patched YouMod Ads feed filters")
 PY
 
+# YouMod Ads - collapse blank feed ad spaces
+echo "==> Patch YouMod Ads blank-space removal"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Ads.x")
+if not file.is_file():
+    print("Missing YouMod/Files/Ads.x")
+    exit(1)
+
+text = file.read_text()
+
+# Strengthen isAdRenderer detection
+old = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
+    if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] && elementRenderer.hasCompatibilityOptions && elementRenderer.compatibilityOptions.hasAdLoggingData) {
+        return YES;
+    }
+    NSString *description = [elementRenderer description];
+    NSString *adString = getAdString(description);
+    if (adString) {
+        return YES;
+    }
+    return NO;
+}'''
+
+new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
+    if (!elementRenderer) return NO;
+
+    if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] && elementRenderer.hasCompatibilityOptions && elementRenderer.compatibilityOptions.hasAdLoggingData) {
+        return YES;
+    }
+
+    NSString *description = [[elementRenderer description] lowercaseString];
+
+    if ([description containsString:@"adslot"] ||
+        [description containsString:@"ad_slot"] ||
+        [description containsString:@"feed_ad"] ||
+        [description containsString:@"in_feed_ad"] ||
+        [description containsString:@"inline_content_ad"] ||
+        [description containsString:@"promoted"] ||
+        [description containsString:@"sparkles"] ||
+        [description containsString:@"paid_content"] ||
+        [description containsString:@"shopping_ad"]) {
+        return YES;
+    }
+
+    NSString *adString = getAdString(description);
+    if (adString) {
+        return YES;
+    }
+
+    return NO;
+}'''
+
+if old in text:
+    text = text.replace(old, new, 1)
+else:
+    print("Warning: isAdRenderer block not found or already changed")
+
+# Remove item sections that become empty after ad filtering
+old2 = '''        YTIItemSectionSupportedRenderers *firstObject = [contentsArray firstObject];
+        YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
+        return isAdRenderer(elementRenderer, 2);'''
+
+new2 = '''        if (contentsArray.count == 0) {
+            return YES;
+        }
+
+        YTIItemSectionSupportedRenderers *firstObject = [contentsArray firstObject];
+        if (!firstObject || !firstObject.elementRenderer) {
+            return YES;
+        }
+
+        YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
+        return isAdRenderer(elementRenderer, 2);'''
+
+if old2 in text:
+    text = text.replace(old2, new2, 1)
+else:
+    print("Warning: empty-section removal anchor not found or already changed")
+
+file.write_text(text)
+print("Patched YouMod Ads blank-space removal")
+PY
+
 echo "==> Patch step complete"
