@@ -129,7 +129,7 @@ jobs:
             YouSpeed
             tweaks/KhmerTopButton
             tweaks/YouPro*.dylib
-            tweaks/YouPro*LangFix.deb
+            tweaks/YouProb2LangFix
           key: ${{ runner.os }}-youpromod-v47-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           restore-keys: |
             ${{ runner.os }}-youpromod-v47-
