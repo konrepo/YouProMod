@@ -242,8 +242,10 @@ for key in [
     "HideShortsShelf",
     "GestureHUD",
     "HidePaidPromoOverlay",
+    "DownloadManager",
+    "DownloadSaveToPhotos",
 ]:
-    text = re.sub(rf"\n\s*{key}: @YES,", "", text)
+    text = re.sub(rf"\n\s*{key}: @(YES|NO),", "", text)
 
 # Set OldQualityPicker default OFF
 text = text.replace("OldQualityPicker: @YES,", "OldQualityPicker: @NO,", 1)
@@ -255,7 +257,9 @@ insert = """OldQualityPicker: @NO,
         GestureControls: @YES,
         HideShortsShelf: @YES,
         GestureHUD: @YES,
-        HidePaidPromoOverlay: @YES,"""
+        HidePaidPromoOverlay: @YES,
+        DownloadManager: @NO,
+        DownloadSaveToPhotos: @NO,"""
 
 if anchor in text:
     text = text.replace(anchor, insert, 1)
