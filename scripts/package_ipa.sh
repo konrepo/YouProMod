@@ -25,7 +25,6 @@ fi
 
 if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
   DYLIB="$ROOT/tweaks/YouPro${INPUT_YOUPRO_VERSION^}.dylib"
-  LANGFIX="$ROOT/tweaks/YouPro${INPUT_YOUPRO_VERSION^}LangFix.deb"
 
   if [ -f "$DYLIB" ]; then
     echo "==> Adding YouPro dylib: $DYLIB"
@@ -33,17 +32,11 @@ if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
   else
     echo "::warning::YouPro dylib not found: $DYLIB (skipping)"
   fi
-
-  if [ -f "$LANGFIX" ]; then
-    echo "==> Adding YouPro LangFix: $LANGFIX"
-    inject_items+=("$LANGFIX")
-  else
-    echo "::warning::YouPro LangFix not found: $LANGFIX (skipping)"
-  fi
 fi
 
 inject_items+=(
   "$ROOT/khmertopbutton.deb"
+  "$ROOT/youprob2langfix.deb"
 )
 
 for item in "${inject_items[@]}"; do
@@ -55,8 +48,8 @@ done
 
 OUTPUT_NAME="YouProMod-${GITHUB_RUN_NUMBER}.ipa"
 
-echo "==> Injecting:"
-printf '%s\n' "${inject_items[@]}"
+echo "==> Final inject list:"
+printf ' - %s\n' "${inject_items[@]}"
 
 cyan -i youtube.ipa \
   -o "$OUTPUT_NAME" \
