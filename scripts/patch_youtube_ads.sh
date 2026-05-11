@@ -35,36 +35,6 @@ if '@"adSlotRenderer",' not in text and anchor in text:
     insert = "\n".join("        " + s for s in extra_strings) + "\n"
     text = text.replace(anchor, insert + anchor, 1)
 
-old = '''%hook _ASDisplayView
-- (void)didMoveToWindow {
-    %orig;
-    if ([self.accessibilityIdentifier isEqualToString:@"eml.expandable_metadata.vpp"]) [self removeFromSuperview];
-    if ([self.accessibilityIdentifier isEqualToString:@"eml.ad_layout.full_width_square_image_layout"]) self.hidden = YES;
-}
-%end'''
-
-new = '''%hook _ASDisplayView
-- (void)didMoveToWindow {
-    %orig;
-
-    NSString *identifier = self.accessibilityIdentifier ?: @"";
-
-    if ([identifier containsString:@"ad_layout"] ||
-        [identifier containsString:@"promoted"] ||
-        [identifier containsString:@"sparkles"] ||
-        [identifier containsString:@"feed_ad"] ||
-        [identifier isEqualToString:@"eml.expandable_metadata.vpp"]) {
-        self.hidden = YES;
-        [self removeFromSuperview];
-    }
-}
-%end'''
-
-if old in text:
-    text = text.replace(old, new, 1)
-else:
-    print("Warning: _ASDisplayView block not found or already changed")
-
 file.write_text(text)
 print("Patched YouMod Ads feed filters")
 PY
