@@ -82,7 +82,10 @@ new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind)
         [description containsString:@"promoted"] ||
         [description containsString:@"sparkles"] ||
         [description containsString:@"paid_content"] ||
-        [description containsString:@"shopping_ad"]) {
+        [description containsString:@"shopping_ad"] ||
+        [description containsString:@"sponsored"] ||
+        [description containsString:@"ad_badge"] ||
+        [description containsString:@"simple_ad_badge"]) {
         return YES;
     }
 
@@ -125,7 +128,10 @@ new2 = '''        if (contentsArray.count == 0) {
             [desc containsString:@"promoted"] ||
             [desc containsString:@"sparkles"] ||
             [desc containsString:@"shopping_ad"] ||
-            [desc containsString:@"paid_content"]) {
+            [desc containsString:@"paid_content"] ||
+            [desc containsString:@"sponsored"] ||
+            [desc containsString:@"ad_badge"] ||
+            [desc containsString:@"simple_ad_badge"]) {
             return YES;
         }
 
