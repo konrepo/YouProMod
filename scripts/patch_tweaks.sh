@@ -533,6 +533,21 @@ new2 = '''        if (contentsArray.count == 0) {
         }
 
         YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
+
+        NSString *desc = [[elementRenderer description] lowercaseString];
+
+        if ([desc containsString:@"adslot"] ||
+            [desc containsString:@"ad_slot"] ||
+            [desc containsString:@"feed_ad"] ||
+            [desc containsString:@"in_feed_ad"] ||
+            [desc containsString:@"inline_content_ad"] ||
+            [desc containsString:@"promoted"] ||
+            [desc containsString:@"sparkles"] ||
+            [desc containsString:@"shopping_ad"] ||
+            [desc containsString:@"paid_content"]) {
+            return YES;
+        }
+
         return isAdRenderer(elementRenderer, 2);'''
 
 if old2 in text:
