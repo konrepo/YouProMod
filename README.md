@@ -62,6 +62,7 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 - Disabled Use old quality picker in **YouMod**
 - Remove some items from Downloader **YouMod**
 - Added **YouProLangFix** (English UI for YouPro)
+- Patched Sponsored in Feed for ** YouMod Ads.x**
 
 ## Note
 
