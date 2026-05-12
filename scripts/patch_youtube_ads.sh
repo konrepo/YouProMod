@@ -239,4 +239,34 @@ else:
     print("Already patched YTSectionListViewController promoted ads")
 PY
 
+# YouMod Ads - hard block via elementData
+echo "==> Patch YouMod Ads elementData block"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Ads.x")
+text = file.read_text()
+
+insert = r'''
+%hook YTIElementRenderer
+- (NSData *)elementData {
+    if ([self respondsToSelector:@selector(hasCompatibilityOptions)] &&
+        self.hasCompatibilityOptions &&
+        self.compatibilityOptions.hasAdLoggingData) {
+        return nil;
+    }
+    return %orig;
+}
+%end
+'''
+
+if "elementData" not in text:
+    text += "\n" + insert
+    file.write_text(text)
+    print("Patched elementData ad block")
+else:
+    print("Already patched elementData")
+PY
+
 echo "==> YouMod Ads patch complete"
