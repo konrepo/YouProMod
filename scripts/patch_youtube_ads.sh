@@ -5,7 +5,6 @@ echo "==> Patch YouMod Ads"
 
 python3 <<'PY'
 from pathlib import Path
-import re
 
 file = Path("YouMod/Files/Ads.x")
 if not file.is_file():
@@ -14,37 +13,19 @@ if not file.is_file():
 
 text = file.read_text()
 
-# Add extra ad strings
-extra_strings = [
-    '@"adSlotRenderer",',
-    '@"ad_slot_renderer",',
-    '@"promoted",',
-    '@"promoted_video",',
-    '@"promotedVideo",',
-    '@"sparkles_web_rendering_layout",',
-    '@"in_feed_ad",',
-    '@"inline_content_ad",',
-    '@"compact_promoted_item",',
-    '@"promoted_sparkles",',
-    '@"paid_content_overlay",',
-    '@"adBreakRenderer",',
-    '@"ad_break_renderer",',
-    '@"medium_rectangle",',
-    '@"search_pyv",',
-    '@"instream",',
-    '@"visit_advertiser",',
-    '@"learn_more",',
-    '@"call_to_action_button",',
-    '@"advertiser",',
-]
+# 1. Remove fragile UI-level hiding (causes white gaps)
+as_hook = '''%hook _ASDisplayView
+- (void)didMoveToWindow {
+    %orig;
+    if ([self.accessibilityIdentifier isEqualToString:@"eml.expandable_metadata.vpp"]) [self removeFromSuperview];
+    if ([self.accessibilityIdentifier isEqualToString:@"eml.ad_layout.full_width_square_image_layout"]) self.hidden = YES;
+}
+%end
+'''
+text = text.replace(as_hook, "")
 
-anchor = '        @"brand_promo",'
-if '@"adSlotRenderer",' not in text and anchor in text:
-    insert = "\n".join("        " + s for s in extra_strings) + "\n"
-    text = text.replace(anchor, insert + anchor, 1)
-
-# Replace isAdRenderer
-old = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
+# 2. Strong renderer detection (keep minimal + stable)
+old_renderer = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
     if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] && elementRenderer.hasCompatibilityOptions && elementRenderer.compatibilityOptions.hasAdLoggingData) {
         return YES;
     }
@@ -56,7 +37,7 @@ old = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind)
     return NO;
 }'''
 
-new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
+new_renderer = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
     if (!elementRenderer) return NO;
 
     if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] &&
@@ -66,73 +47,42 @@ new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind)
     }
 
     NSString *description = [[elementRenderer description] lowercaseString];
+    NSString *adString = getAdString(description);
 
-    if ([description containsString:@"adslot"] ||
+    if (adString ||
+        [description containsString:@"adslot"] ||
         [description containsString:@"ad_slot"] ||
         [description containsString:@"feed_ad"] ||
-        [description containsString:@"in_feed_ad"] ||
-        [description containsString:@"inline_content_ad"] ||
-        [description containsString:@"promoted"] ||
-        [description containsString:@"sparkles"] ||
-        [description containsString:@"paid_content"] ||
-        [description containsString:@"shopping_ad"] ||
         [description containsString:@"sponsored"] ||
-        [description containsString:@"ad_badge"] ||
-        [description containsString:@"simple_ad_badge"] ||
-        [description containsString:@"medium_rectangle"] ||
-        [description containsString:@"search_pyv"] ||
-        [description containsString:@"instream"] ||
-        [description containsString:@"visit_advertiser"] ||
-        [description containsString:@"learn_more"] ||
-        [description containsString:@"call_to_action_button"] ||
-        [description containsString:@"cta"] ||
-        [description containsString:@"advertiser"]) {
-        return YES;
-    }
-
-    NSString *adString = getAdString(description);
-    if (adString) {
+        [description containsString:@"promoted"] ||
+        [description containsString:@"paid_content"] ||
+        [description containsString:@"shopping_ad"]) {
         return YES;
     }
 
     return NO;
 }'''
 
-if old in text:
-    text = text.replace(old, new, 1)
-else:
-    print("Warning: isAdRenderer block not found or already changed")
+if old_renderer in text:
+    text = text.replace(old_renderer, new_renderer, 1)
 
-# Replace final firstObject check
-old2 = '''        YTIItemSectionSupportedRenderers *firstObject = [contentsArray firstObject];
+# 3. Fix section filtering (remove empty + ad sections safely)
+old_first = '''        YTIItemSectionSupportedRenderers *firstObject = [contentsArray firstObject];
         YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
         return isAdRenderer(elementRenderer, 2);'''
 
-new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowercaseString];
-
-        if ([sectionDesc containsString:@"sponsored"] ||
-            [sectionDesc containsString:@"ad_badge"] ||
-            [sectionDesc containsString:@"simple_ad_badge"] ||
-            [sectionDesc containsString:@"adslot"] ||
-            [sectionDesc containsString:@"ad_slot"] ||
-            [sectionDesc containsString:@"feed_ad"] ||
-            [sectionDesc containsString:@"in_feed_ad"] ||
-            [sectionDesc containsString:@"inline_content_ad"] ||
-            [sectionDesc containsString:@"promoted_sparkles"] ||
-            [sectionDesc containsString:@"paid_content"] ||
-            [sectionDesc containsString:@"call_to_action"] ||
-            [sectionDesc containsString:@"medium_rectangle"] ||
-            [sectionDesc containsString:@"search_pyv"] ||
-            [sectionDesc containsString:@"instream"] ||
-            [sectionDesc containsString:@"visit_advertiser"] ||
-            [sectionDesc containsString:@"learn_more"] ||
-            [sectionDesc containsString:@"call_to_action_button"] ||
-            [sectionDesc containsString:@"cta"] ||
-            [sectionDesc containsString:@"advertiser"]) {
+new_first = '''        if (contentsArray.count == 0) {
             return YES;
         }
 
-        if (contentsArray.count == 0) {
+        NSString *sectionDesc = [[sectionRenderer description] lowercaseString];
+        if ([sectionDesc containsString:@"sponsored"] ||
+            [sectionDesc containsString:@"adslot"] ||
+            [sectionDesc containsString:@"ad_slot"] ||
+            [sectionDesc containsString:@"feed_ad"] ||
+            [sectionDesc containsString:@"promoted"] ||
+            [sectionDesc containsString:@"paid_content"] ||
+            [sectionDesc containsString:@"shopping_ad"]) {
             return YES;
         }
 
@@ -142,50 +92,32 @@ new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowerca
         }
 
         YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
-
-        NSString *desc = [[elementRenderer description] lowercaseString];
-
-        if ([desc containsString:@"adslot"] ||
-            [desc containsString:@"ad_slot"] ||
-            [desc containsString:@"feed_ad"] ||
-            [desc containsString:@"in_feed_ad"] ||
-            [desc containsString:@"inline_content_ad"] ||
-            [desc containsString:@"sponsored"] ||
-            [desc containsString:@"ad_badge"] ||
-            [desc containsString:@"simple_ad_badge"] ||
-            [desc containsString:@"shopping_ad"] ||
-            [desc containsString:@"paid_content"] ||
-            [desc containsString:@"call_to_action"] ||
-            [desc containsString:@"medium_rectangle"] ||
-            [desc containsString:@"search_pyv"] ||
-            [desc containsString:@"instream"] ||
-            [desc containsString:@"visit_advertiser"] ||
-            [desc containsString:@"learn_more"] ||
-            [desc containsString:@"call_to_action_button"] ||
-            [desc containsString:@"cta"] ||
-            [desc containsString:@"advertiser"]) {
-            return YES;
-        }
-
         return isAdRenderer(elementRenderer, 2);'''
 
-if old2 in text:
-    text = text.replace(old2, new2, 1)
-else:
-    print("Warning: firstObject block not found or already changed")
+if old_first in text:
+    text = text.replace(old_first, new_first, 1)
 
-# Remove UI hiding hook to avoid blank white space
-as_hook = r'''%hook _ASDisplayView
-- (void)didMoveToWindow {
-    %orig;
-    if ([self.accessibilityIdentifier isEqualToString:@"eml.expandable_metadata.vpp"]) [self removeFromSuperview];
-    if ([self.accessibilityIdentifier isEqualToString:@"eml.ad_layout.full_width_square_image_layout"]) self.hidden = YES;
+# 4. Hard block ads at data level
+element_hook = r'''
+%hook YTIElementRenderer
+
+- (NSData *)elementData {
+    if ([self respondsToSelector:@selector(hasCompatibilityOptions)] &&
+        self.hasCompatibilityOptions &&
+        self.compatibilityOptions.hasAdLoggingData) {
+        return nil;
+    }
+
+    return %orig;
 }
+
 %end
 '''
-text = text.replace(as_hook, "")
 
-# Add YTSectionListViewController hook
+if "%hook YTIElementRenderer" not in text:
+    text += "\n" + element_hook
+
+# 5. Section-level promoted ads (YTPlusM method)
 section_hook = r'''
 %hook YTSectionListViewController
 
@@ -214,26 +146,6 @@ section_hook = r'''
 
 if "%hook YTSectionListViewController" not in text:
     text += "\n" + section_hook
-
-# Add hard elementData block
-element_hook = r'''
-%hook YTIElementRenderer
-
-- (NSData *)elementData {
-    if ([self respondsToSelector:@selector(hasCompatibilityOptions)] &&
-        self.hasCompatibilityOptions &&
-        self.compatibilityOptions.hasAdLoggingData) {
-        return nil;
-    }
-
-    return %orig;
-}
-
-%end
-'''
-
-if "%hook YTIElementRenderer" not in text:
-    text += "\n" + element_hook
 
 file.write_text(text)
 print("Patched YouMod Ads")
