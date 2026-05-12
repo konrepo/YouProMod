@@ -107,7 +107,23 @@ old2 = '''        YTIItemSectionSupportedRenderers *firstObject = [contentsArray
         YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
         return isAdRenderer(elementRenderer, 2);'''
 
-new2 = '''        if (contentsArray.count == 0) {
+new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowercaseString];
+
+        if ([sectionDesc containsString:@"sponsored"] ||
+            [sectionDesc containsString:@"ad_badge"] ||
+            [sectionDesc containsString:@"simple_ad_badge"] ||
+            [sectionDesc containsString:@"adslot"] ||
+            [sectionDesc containsString:@"ad_slot"] ||
+            [sectionDesc containsString:@"feed_ad"] ||
+            [sectionDesc containsString:@"in_feed_ad"] ||
+            [sectionDesc containsString:@"inline_content_ad"] ||
+            [sectionDesc containsString:@"promoted_sparkles"] ||
+            [sectionDesc containsString:@"paid_content"] ||
+            [sectionDesc containsString:@"call_to_action"]) {
+            return YES;
+        }
+
+        if (contentsArray.count == 0) {
             return YES;
         }
 
@@ -125,13 +141,12 @@ new2 = '''        if (contentsArray.count == 0) {
             [desc containsString:@"feed_ad"] ||
             [desc containsString:@"in_feed_ad"] ||
             [desc containsString:@"inline_content_ad"] ||
-            [desc containsString:@"promoted"] ||
-            [desc containsString:@"sparkles"] ||
-            [desc containsString:@"shopping_ad"] ||
-            [desc containsString:@"paid_content"] ||
             [desc containsString:@"sponsored"] ||
             [desc containsString:@"ad_badge"] ||
-            [desc containsString:@"simple_ad_badge"]) {
+            [desc containsString:@"simple_ad_badge"] ||
+            [desc containsString:@"shopping_ad"] ||
+            [desc containsString:@"paid_content"] ||
+            [desc containsString:@"call_to_action"]) {
             return YES;
         }
 
