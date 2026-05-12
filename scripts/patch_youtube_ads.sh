@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# YouMod Ads - improve feed ad filtering
-echo "==> Patch YouMod Ads feed filters"
+echo "==> Patch YouMod Ads"
 
 python3 <<'PY'
 from pathlib import Path
+import re
 
 file = Path("YouMod/Files/Ads.x")
 if not file.is_file():
@@ -14,6 +14,7 @@ if not file.is_file():
 
 text = file.read_text()
 
+# Add extra ad strings
 extra_strings = [
     '@"adSlotRenderer",',
     '@"ad_slot_renderer",',
@@ -42,24 +43,7 @@ if '@"adSlotRenderer",' not in text and anchor in text:
     insert = "\n".join("        " + s for s in extra_strings) + "\n"
     text = text.replace(anchor, insert + anchor, 1)
 
-file.write_text(text)
-print("Patched YouMod Ads feed filters")
-PY
-
-# YouMod Ads - collapse blank feed ad spaces
-echo "==> Patch YouMod Ads blank-space removal"
-
-python3 <<'PY'
-from pathlib import Path
-
-file = Path("YouMod/Files/Ads.x")
-if not file.is_file():
-    print("Missing YouMod/Files/Ads.x")
-    exit(1)
-
-text = file.read_text()
-
-# Strengthen isAdRenderer detection
+# Replace isAdRenderer
 old = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
     if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] && elementRenderer.hasCompatibilityOptions && elementRenderer.compatibilityOptions.hasAdLoggingData) {
         return YES;
@@ -75,7 +59,9 @@ old = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind)
 new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind) {
     if (!elementRenderer) return NO;
 
-    if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] && elementRenderer.hasCompatibilityOptions && elementRenderer.compatibilityOptions.hasAdLoggingData) {
+    if ([elementRenderer respondsToSelector:@selector(hasCompatibilityOptions)] &&
+        elementRenderer.hasCompatibilityOptions &&
+        elementRenderer.compatibilityOptions.hasAdLoggingData) {
         return YES;
     }
 
@@ -117,7 +103,7 @@ if old in text:
 else:
     print("Warning: isAdRenderer block not found or already changed")
 
-# Remove item sections that become empty after ad filtering
+# Replace final firstObject check
 old2 = '''        YTIItemSectionSupportedRenderers *firstObject = [contentsArray firstObject];
         YTIElementRenderer *elementRenderer = firstObject.elementRenderer;
         return isAdRenderer(elementRenderer, 2);'''
@@ -186,26 +172,21 @@ new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowerca
 if old2 in text:
     text = text.replace(old2, new2, 1)
 else:
-    print("Warning: empty-section removal anchor not found or already changed")
+    print("Warning: firstObject block not found or already changed")
 
-file.write_text(text)
-print("Patched YouMod Ads blank-space removal")
-PY
+# Remove UI hiding hook to avoid blank white space
+as_hook = r'''%hook _ASDisplayView
+- (void)didMoveToWindow {
+    %orig;
+    if ([self.accessibilityIdentifier isEqualToString:@"eml.expandable_metadata.vpp"]) [self removeFromSuperview];
+    if ([self.accessibilityIdentifier isEqualToString:@"eml.ad_layout.full_width_square_image_layout"]) self.hidden = YES;
+}
+%end
+'''
+text = text.replace(as_hook, "")
 
-# YouMod Ads - remove promoted section list ads
-echo "==> Patch YouMod Ads section list promoted renderers"
-
-python3 <<'PY'
-from pathlib import Path
-
-file = Path("YouMod/Files/Ads.x")
-if not file.is_file():
-    print("Missing YouMod/Files/Ads.x")
-    exit(1)
-
-text = file.read_text()
-
-insert = r'''
+# Add YTSectionListViewController hook
+section_hook = r'''
 %hook YTSectionListViewController
 
 - (void)loadWithModel:(YTISectionListRenderer *)model {
@@ -231,42 +212,31 @@ insert = r'''
 %end
 '''
 
-if "hasPromotedVideoInlineMutedRenderer" not in text:
-    text += "\n" + insert
-    file.write_text(text)
-    print("Patched YTSectionListViewController promoted ads")
-else:
-    print("Already patched YTSectionListViewController promoted ads")
-PY
+if "%hook YTSectionListViewController" not in text:
+    text += "\n" + section_hook
 
-# YouMod Ads - hard block via elementData
-echo "==> Patch YouMod Ads elementData block"
-
-python3 <<'PY'
-from pathlib import Path
-
-file = Path("YouMod/Files/Ads.x")
-text = file.read_text()
-
-insert = r'''
+# Add hard elementData block
+element_hook = r'''
 %hook YTIElementRenderer
+
 - (NSData *)elementData {
     if ([self respondsToSelector:@selector(hasCompatibilityOptions)] &&
         self.hasCompatibilityOptions &&
         self.compatibilityOptions.hasAdLoggingData) {
         return nil;
     }
+
     return %orig;
 }
+
 %end
 '''
 
-if "elementData" not in text:
-    text += "\n" + insert
-    file.write_text(text)
-    print("Patched elementData ad block")
-else:
-    print("Already patched elementData")
+if "%hook YTIElementRenderer" not in text:
+    text += "\n" + element_hook
+
+file.write_text(text)
+print("Patched YouMod Ads")
 PY
 
 echo "==> YouMod Ads patch complete"
