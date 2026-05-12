@@ -28,6 +28,13 @@ extra_strings = [
     '@"paid_content_overlay",',
     '@"adBreakRenderer",',
     '@"ad_break_renderer",',
+    '@"medium_rectangle",',
+    '@"search_pyv",',
+    '@"instream",',
+    '@"visit_advertiser",',
+    '@"learn_more",',
+    '@"call_to_action_button",',
+    '@"advertiser",',
 ]
 
 anchor = '        @"brand_promo",'
@@ -85,7 +92,15 @@ new = '''static BOOL isAdRenderer(YTIElementRenderer *elementRenderer, int kind)
         [description containsString:@"shopping_ad"] ||
         [description containsString:@"sponsored"] ||
         [description containsString:@"ad_badge"] ||
-        [description containsString:@"simple_ad_badge"]) {
+        [description containsString:@"simple_ad_badge"] ||
+        [description containsString:@"medium_rectangle"] ||
+        [description containsString:@"search_pyv"] ||
+        [description containsString:@"instream"] ||
+        [description containsString:@"visit_advertiser"] ||
+        [description containsString:@"learn_more"] ||
+        [description containsString:@"call_to_action_button"] ||
+        [description containsString:@"cta"] ||
+        [description containsString:@"advertiser"]) {
         return YES;
     }
 
@@ -119,7 +134,15 @@ new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowerca
             [sectionDesc containsString:@"inline_content_ad"] ||
             [sectionDesc containsString:@"promoted_sparkles"] ||
             [sectionDesc containsString:@"paid_content"] ||
-            [sectionDesc containsString:@"call_to_action"]) {
+            [sectionDesc containsString:@"call_to_action"] ||
+            [sectionDesc containsString:@"medium_rectangle"] ||
+            [sectionDesc containsString:@"search_pyv"] ||
+            [sectionDesc containsString:@"instream"] ||
+            [sectionDesc containsString:@"visit_advertiser"] ||
+            [sectionDesc containsString:@"learn_more"] ||
+            [sectionDesc containsString:@"call_to_action_button"] ||
+            [sectionDesc containsString:@"cta"] ||
+            [sectionDesc containsString:@"advertiser"]) {
             return YES;
         }
 
@@ -146,7 +169,15 @@ new2 = '''        NSString *sectionDesc = [[sectionRenderer description] lowerca
             [desc containsString:@"simple_ad_badge"] ||
             [desc containsString:@"shopping_ad"] ||
             [desc containsString:@"paid_content"] ||
-            [desc containsString:@"call_to_action"]) {
+            [desc containsString:@"call_to_action"] ||
+            [desc containsString:@"medium_rectangle"] ||
+            [desc containsString:@"search_pyv"] ||
+            [desc containsString:@"instream"] ||
+            [desc containsString:@"visit_advertiser"] ||
+            [desc containsString:@"learn_more"] ||
+            [desc containsString:@"call_to_action_button"] ||
+            [desc containsString:@"cta"] ||
+            [desc containsString:@"advertiser"]) {
             return YES;
         }
 
