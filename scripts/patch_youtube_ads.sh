@@ -192,4 +192,51 @@ file.write_text(text)
 print("Patched YouMod Ads blank-space removal")
 PY
 
+# YouMod Ads - remove promoted section list ads
+echo "==> Patch YouMod Ads section list promoted renderers"
+
+python3 <<'PY'
+from pathlib import Path
+
+file = Path("YouMod/Files/Ads.x")
+if not file.is_file():
+    print("Missing YouMod/Files/Ads.x")
+    exit(1)
+
+text = file.read_text()
+
+insert = r'''
+%hook YTSectionListViewController
+
+- (void)loadWithModel:(YTISectionListRenderer *)model {
+    NSMutableArray *contentsArray = model.contentsArray;
+
+    NSIndexSet *removeIndexes = [contentsArray indexesOfObjectsPassingTest:^BOOL(id renderers, NSUInteger idx, BOOL *stop) {
+        id sectionRenderer = [renderers respondsToSelector:@selector(itemSectionRenderer)] ? [renderers itemSectionRenderer] : nil;
+        NSMutableArray *sectionContents = [sectionRenderer respondsToSelector:@selector(contentsArray)] ? [sectionRenderer contentsArray] : nil;
+        id firstObject = [sectionContents firstObject];
+
+        if (!firstObject) return NO;
+
+        return ([firstObject respondsToSelector:@selector(hasPromotedVideoRenderer)] && [firstObject hasPromotedVideoRenderer]) ||
+               ([firstObject respondsToSelector:@selector(hasCompactPromotedVideoRenderer)] && [firstObject hasCompactPromotedVideoRenderer]) ||
+               ([firstObject respondsToSelector:@selector(hasPromotedVideoInlineMutedRenderer)] && [firstObject hasPromotedVideoInlineMutedRenderer]);
+    }];
+
+    [contentsArray removeObjectsAtIndexes:removeIndexes];
+
+    %orig;
+}
+
+%end
+'''
+
+if "hasPromotedVideoInlineMutedRenderer" not in text:
+    text += "\n" + insert
+    file.write_text(text)
+    print("Patched YTSectionListViewController promoted ads")
+else:
+    print("Already patched YTSectionListViewController promoted ads")
+PY
+
 echo "==> YouMod Ads patch complete"
