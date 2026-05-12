@@ -118,6 +118,7 @@ if "%hook YTIElementRenderer" not in text:
     text += "\n" + element_hook
 
 # 5. Section-level promoted ads (YTPlusM method)
+# https://github.com/Mark02-2012/YTPlusM
 section_hook = r'''
 %hook YTSectionListViewController
 
