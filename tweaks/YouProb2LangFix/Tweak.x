@@ -65,7 +65,7 @@ static BOOL IsArabicDownloadText(NSString *text) {
     if (IsArabicSize(text)) {
         text = FixSize(text);
     } else if (IsDownloadQualityTitle(text)) {
-        text = @"Download Quality (ខ្មែរ)";
+        text = @"🇰🇭 ខ្មែរ";
     }
     %orig(text);
 }
