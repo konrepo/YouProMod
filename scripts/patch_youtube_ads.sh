@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# If ads ever come back, always check hasAdLoggingData first.
+
 echo "==> Patch YouMod Ads"
 
 python3 <<'PY'
