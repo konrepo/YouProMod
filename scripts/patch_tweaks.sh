@@ -242,6 +242,7 @@ for key in [
     "HideShortsShelf",
     "GestureHUD",
     "HidePaidPromoOverlay",
+    "HideCreateButton",
     "DownloadManager",
     "DownloadSaveToPhotos",
 ]:
@@ -258,6 +259,7 @@ insert = """OldQualityPicker: @NO,
         HideShortsShelf: @YES,
         GestureHUD: @YES,
         HidePaidPromoOverlay: @YES,
+        HideCreateButton: @NO,
         DownloadManager: @NO,
         DownloadSaveToPhotos: @NO,"""
 
