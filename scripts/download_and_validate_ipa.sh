@@ -8,7 +8,7 @@ if [ -z "${INPUT_IPA_URL:-}" ]; then
   exit 1
 fi
 
-wget "${INPUT_IPA_URL}" --quiet --no-verbose -O youtube.ipa
+curl -L --fail --silent --show-error "${INPUT_IPA_URL}" -o youtube.ipa
 
 if [ ! -s youtube.ipa ]; then
   echo "::error::Downloaded IPA is missing or empty"
