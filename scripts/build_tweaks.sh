@@ -48,9 +48,10 @@ if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
 
   echo "==> Patching YTLocalQueue button type issue"
   perl -0pi -e 's/UIButton(Configuration)? \*btn = \[act button\];/id btn = [act button];/g' "$ROOT/YTLocalQueue/Tweak.xm"
+  perl -0pi -e 's/title = btn\.currentTitle;/title = [(UIButton *)btn currentTitle];/g' "$ROOT/YTLocalQueue/Tweak.xm"
 
-  echo "==> YTLocalQueue button line after patch:"
-  grep -n "btn = \\[act button\\]" "$ROOT/YTLocalQueue/Tweak.xm" || true
+  echo "==> YTLocalQueue button lines after patch:"
+  grep -n "btn = \\[act button\\]\\|currentTitle" "$ROOT/YTLocalQueue/Tweak.xm" || true
 
   build_rootless "YTLocalQueue" "ytlocalqueue.deb"
 fi
