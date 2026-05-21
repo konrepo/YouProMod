@@ -37,7 +37,7 @@ fi
 
 # YTLocalQueue
 if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
-  fetch_group bpetrynski YTLocalQueue
+  fetch_group oceandrift7 YTLocalQueue
 else
   echo "==> Skipping YTLocalQueue hash"
 fi
