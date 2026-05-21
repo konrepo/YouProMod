@@ -24,7 +24,8 @@ old = '''if ([t containsString:@"play next in queue"]) {
                     break; 
                 }'''
 
-new = '''if ([t containsString:@"download"]) {
+new = '''if ([t isEqualToString:@"download video"] ||
+                    [t isEqualToString:@"download"]) {
                     [actions removeObjectAtIndex:i];
                     i--;
                     continue;
