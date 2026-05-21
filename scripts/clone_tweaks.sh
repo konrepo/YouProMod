@@ -37,3 +37,10 @@ if [ "${INPUT_DEMC:-false}" = "true" ]; then
 else
   echo "==> Skipping DontEatMyContent"
 fi
+
+# YTLocalQueue
+if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
+  clone_group bpetrynski YTLocalQueue
+else
+  echo "==> Skipping YTLocalQueue"
+fi
