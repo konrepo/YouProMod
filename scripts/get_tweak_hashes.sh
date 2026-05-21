@@ -2,6 +2,7 @@
 set -euo pipefail
 
 echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
+echo "==> INPUT_YTLOCALQUEUE=${INPUT_YTLOCALQUEUE:-false}"
 
 get_hash() {
   git ls-remote "$1" HEAD | cut -f1
