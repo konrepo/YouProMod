@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 
 echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
+echo "==> INPUT_YTLOCALQUEUE=${INPUT_YTLOCALQUEUE:-false}"
 
 build_rootless() {
   local dir="$1"
