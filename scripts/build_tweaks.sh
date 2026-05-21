@@ -36,6 +36,15 @@ fi
 
 # YTLocalQueue
 if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
+  mkdir -p "$ROOT/YTLocalQueue/Headers"
+  rm -rf "$ROOT/YTLocalQueue/Headers/YouTubeHeader"
+  ln -s "$THEOS/include/YouTubeHeader" "$ROOT/YTLocalQueue/Headers/YouTubeHeader"
+
+  build_rootless "YTLocalQueue" "ytlocalqueue.deb"
+fi
+
+# YTLocalQueue
+if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
   build_rootless "YTLocalQueue" "ytlocalqueue.deb"
 fi
 
