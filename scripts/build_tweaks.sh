@@ -46,6 +46,9 @@ if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
   echo "==> YTLocalQueue TARGET after patch:"
   grep -o 'TARGET[[:space:]]*:=[[:space:]]*iphone:clang:[^[:space:]]*' "$ROOT/YTLocalQueue/Makefile" || true
 
+  echo "==> Patching YTLocalQueue UIButtonConfiguration compile issue"
+  perl -0pi -e 's/UIButton \*btn = \[act button\];/UIButtonConfiguration *btn = [act button];/g' "$ROOT/YTLocalQueue/Tweak.xm"
+
   build_rootless "YTLocalQueue" "ytlocalqueue.deb"
 fi
 
