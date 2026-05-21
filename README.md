@@ -40,6 +40,9 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 
 [Mark02-2012|YTLite.x](https://github.com/Mark02-2012/YTPlusM)
 
+[Oceandrift7](https://github.com/oceandrift7/YTLocalQueue)
+
+
 # Features Included
 
 - YouPro
@@ -50,7 +53,8 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 - YouChooseQuality
 - YouPiP
 - YouGroupSettings
-- YTVideoOverlayin 
+- YTVideoOverlayin
+- YTLocalQueue
 
 ### ✨ Changes
 
