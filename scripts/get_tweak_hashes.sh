@@ -34,6 +34,13 @@ else
   echo "==> Skipping DontEatMyContent hash"
 fi
 
+# YTLocalQueue
+if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
+  fetch_group bpetrynski YTLocalQueue
+else
+  echo "==> Skipping YTLocalQueue hash"
+fi
+
 echo "==> Adding local tweak hashes"
 
 if [ -d "tweaks/YouProb2LangFix" ]; then
