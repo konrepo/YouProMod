@@ -43,11 +43,6 @@ if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
   build_rootless "YTLocalQueue" "ytlocalqueue.deb"
 fi
 
-# YTLocalQueue
-if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
-  build_rootless "YTLocalQueue" "ytlocalqueue.deb"
-fi
-
 build_rootless "tweaks/KhmerTopButton" "khmertopbutton.deb"
 build_rootless "tweaks/YouProb2LangFix" "youprob2langfix.deb"
 
