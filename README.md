@@ -38,9 +38,9 @@ YouProMod is a workflow customized YouTube mod from dev [Tonwalter888|YouMod](ht
 
 [Alibusut](https://t.me/alibusut) / [ipastar](https://t.me/ipastar)
 
-[Mark02-2012|YTLite.x](https://github.com/Mark02-2012/YTPlusM)
+[Mark02-2012 | YTLite.x](https://github.com/Mark02-2012/YTPlusM)
 
-[Oceandrift7](https://github.com/oceandrift7/YTLocalQueue)
+[Oceandrift7 | YTLocalQueue](https://github.com/oceandrift7/YTLocalQueue)
 
 
 # Features Included
