@@ -6,6 +6,7 @@ ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 echo "==> Preparing tweak injection"
 echo "==> INPUT_DEMC=${INPUT_DEMC:-false}"
 echo "==> INPUT_YOUPRO_VERSION=${INPUT_YOUPRO_VERSION:-none}"
+echo "==> INPUT_YTLOCALQUEUE=${INPUT_YTLOCALQUEUE:-false}"
 
 inject_items=(
   "OpenYouTubeSafariExtension.appex"
@@ -21,6 +22,10 @@ inject_items=(
 
 if [ "${INPUT_DEMC:-false}" = "true" ]; then
   inject_items+=("$ROOT/donteatmycontent.deb")
+fi
+
+if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
+  inject_items+=("$ROOT/ytlocalqueue.deb")
 fi
 
 if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
