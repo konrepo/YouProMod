@@ -395,4 +395,7 @@ PY
 [ -f scripts/patch_youtube_ads.sh ] || { echo "Missing patch_youtube_ads.sh"; exit 1; }
 bash scripts/patch_youtube_ads.sh
 
+[ -f scripts/patch_ytlocalqueue.sh ] || { echo "Missing patch_ytlocalqueue.sh"; exit 1; }
+bash scripts/patch_ytlocalqueue.sh
+
 echo "==> Patch step complete"
