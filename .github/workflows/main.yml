@@ -26,6 +26,12 @@ on:
         required: false
         type: boolean        
 
+      ytlocalqueue:
+        description: "Integrate YTLocalQueue"
+        default: true
+        required: false
+        type: boolean        
+
       youpro_version:
         description: "YouPro dylib to inject"
         default: "beta3"
@@ -49,6 +55,7 @@ jobs:
       INPUT_DISPLAY_NAME: ${{ inputs.display_name }}
       INPUT_BUNDLE_ID: ${{ inputs.bundle_id }}
       INPUT_YOUPRO_VERSION: ${{ inputs.youpro_version }}
+      INPUT_YTLOCALQUEUE: ${{ inputs.ytlocalqueue }}
       
     steps:
       - name: Checkout repository
@@ -127,6 +134,7 @@ jobs:
             DontEatMyContent
             YouGroupSettings
             YouSpeed
+            YTLocalQueue
             tweaks/KhmerTopButton
             tweaks/YouPro*.dylib
             tweaks/YouProb2LangFix
