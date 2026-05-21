@@ -25,7 +25,11 @@ if [ "${INPUT_DEMC:-false}" = "true" ]; then
 fi
 
 if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
-  inject_items+=("$ROOT/ytlocalqueue.deb")
+  if [ -f "$ROOT/ytlocalqueue.deb" ]; then
+    inject_items+=("$ROOT/ytlocalqueue.deb")
+  else
+    echo "::warning::ytlocalqueue.deb not found (skipping)"
+  fi
 fi
 
 if [ -n "${INPUT_YOUPRO_VERSION:-}" ]; then
