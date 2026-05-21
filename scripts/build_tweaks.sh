@@ -41,7 +41,10 @@ if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
   ln -sf "$THEOS/include/YouTubeHeader" "$ROOT/YTLocalQueue/Headers/YouTubeHeader"
 
   echo "==> Patching YTLocalQueue SDK target"
-  sed -i.bak 's/^TARGET *=.*/TARGET = iphone:clang:18.6:14.0/' "$ROOT/YTLocalQueue/Makefile"
+  perl -0pi -e 's/TARGET\s*:?=\s*iphone:clang:[0-9.]+:[0-9.]+/TARGET := iphone:clang:18.6:14.0/' "$ROOT/YTLocalQueue/Makefile"
+
+  echo "==> YTLocalQueue TARGET after patch:"
+  grep -o 'TARGET[[:space:]]*:=[[:space:]]*iphone:clang:[^[:space:]]*' "$ROOT/YTLocalQueue/Makefile" || true
 
   build_rootless "YTLocalQueue" "ytlocalqueue.deb"
 fi
