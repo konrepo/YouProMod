@@ -25,3 +25,8 @@ git clone --quiet --depth=1 https://github.com/PoomSmart/YouTubeHeader.git "$THE
 echo "==> Cloning PSHeader"
 rm -rf "$THEOS/include/PSHeader"
 git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git "$THEOS/include/PSHeader"
+
+echo "==> Linking headers for YTLocalQueue"
+mkdir -p "$GITHUB_WORKSPACE/Headers"
+rm -rf "$GITHUB_WORKSPACE/Headers/YouTubeHeader"
+ln -s "$THEOS/include/YouTubeHeader" "$GITHUB_WORKSPACE/Headers/YouTubeHeader"
