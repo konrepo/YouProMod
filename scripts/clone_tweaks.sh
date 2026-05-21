@@ -41,7 +41,7 @@ fi
 
 # YTLocalQueue
 if [ "${INPUT_YTLOCALQUEUE:-false}" = "true" ]; then
-  clone_group bpetrynski YTLocalQueue
+  clone_group oceandrift7 YTLocalQueue
 else
   echo "==> Skipping YTLocalQueue"
 fi
