@@ -76,6 +76,6 @@ After sideloading, you need to force close (restart) the app twice to fix the UI
   
 ## Version
 
-Latest confirmed: 21.20.4<br>
+Latest confirmed: 21.22.4<br>
 Device: iPhone 15 Pro Max (latest iOS)<br>
-Confirmed Date: 05/21/2026
+Confirmed Date: 06/01/2026
