@@ -399,6 +399,64 @@ grep -RInE "if[[:space:]]*\(!IS_ENABLED.*%orig" YouMod/Files/*.x || true
 grep -RInF "%orig(nil)" YouMod/Files/*.x || true
 grep -RInF "%orig(context)" YouMod/Files/*.x || true
 
+echo "==> Auto-fix risky Logos one-line %orig syntax"
+
+python3 <<'PY'
+from pathlib import Path
+import re
+
+for path in Path("YouMod/Files").glob("*.x"):
+    text = path.read_text()
+    original = text
+
+    # Fix one-line void ternary: condition ? %orig(args) : %orig;
+    text = re.sub(
+        r'- \(void\)([^{]+)\{ ([^?;{}]+?) \? %orig\((.*?)\) : %orig; \}',
+        lambda m: (
+            f'- (void){m.group(1)}{{\n'
+            f'    if ({m.group(2).strip()}) {{\n'
+            f'        %orig({m.group(3)});\n'
+            f'    }} else {{\n'
+            f'        %orig;\n'
+            f'    }}\n'
+            f'}}'
+        ),
+        text
+    )
+
+    # Fix one-line void ternary with %orig(args) : %orig(otherArgs)
+    text = re.sub(
+        r'- \(void\)([^{]+)\{ ([^?;{}]+?) \? %orig\((.*?)\) : %orig\((.*?)\); \}',
+        lambda m: (
+            f'- (void){m.group(1)}{{\n'
+            f'    if ({m.group(2).strip()}) {{\n'
+            f'        %orig({m.group(3)});\n'
+            f'    }} else {{\n'
+            f'        %orig({m.group(4)});\n'
+            f'    }}\n'
+            f'}}'
+        ),
+        text
+    )
+
+    # Fix one-line void if: if (...) %orig;
+    text = re.sub(
+        r'- \(void\)([^{]+)\{ if \((.*?)\) %orig; \}',
+        lambda m: (
+            f'- (void){m.group(1)}{{\n'
+            f'    if ({m.group(2)}) {{\n'
+            f'        %orig;\n'
+            f'    }}\n'
+            f'}}'
+        ),
+        text
+    )
+
+    if text != original:
+        path.write_text(text)
+        print(f"Patched {path}")
+PY
+
 [ -f scripts/patch_youtube_ads.sh ] || { echo "Missing patch_youtube_ads.sh"; exit 1; }
 bash scripts/patch_youtube_ads.sh
 
