@@ -551,6 +551,29 @@ for path in root.glob("*.x"):
         "}"
     )  
 
+    # Tabbar.x
+    text = text.replace(
+        "- (void)setFillColor:(id)arg1 { IS_ENABLED(HideTabIndi) ? %orig([UIColor clearColor]) : %orig; }",
+        "- (void)setFillColor:(id)arg1 {\n"
+        "    if (IS_ENABLED(HideTabIndi)) {\n"
+        "        %orig([UIColor clearColor]);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setBorderColor:(id)arg1  { IS_ENABLED(HideTabIndi) ? %orig([UIColor clearColor]) : %orig; }",
+        "- (void)setBorderColor:(id)arg1 {\n"
+        "    if (IS_ENABLED(HideTabIndi)) {\n"
+        "        %orig([UIColor clearColor]);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
     if text != original:
         path.write_text(text)
         print(f"Patched {path}")
