@@ -419,6 +419,16 @@ for path in root.glob("*.x"):
         "}"
     )
 
+    text = text.replace(
+        "- (BOOL)isPremiumLogo { return IS_ENABLED(YTPremiumLogo) ? YES : %orig; }",
+        "- (BOOL)isPremiumLogo {\n"
+        "    if (IS_ENABLED(YTPremiumLogo)) {\n"
+        "        return YES;\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
     # Feed.x
     text = text.replace(
         "- (void)setFeedHeaderScrollMode:(int)arg1 { IS_ENABLED(HideSubbar) ? %orig(0) : %orig; }",
@@ -426,6 +436,33 @@ for path in root.glob("*.x"):
         "    if (IS_ENABLED(HideSubbar)) {\n"
         "        %orig(0);\n"
         "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setChipFilterView:(id)arg1 { if (!IS_ENABLED(HideSubbar)) %orig; }",
+        "- (void)setChipFilterView:(id)arg1 {\n"
+        "    if (!IS_ENABLED(HideSubbar)) {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)enableSubheaderBarWithView:(id)arg1 { if (!IS_ENABLED(HideSubbar)) %orig; }",
+        "- (void)enableSubheaderBarWithView:(id)arg1 {\n"
+        "    if (!IS_ENABLED(HideSubbar)) {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setSuggestions:(id)arg1 { if (!IS_ENABLED(HideSearchHis)) %orig; }",
+        "- (void)setSuggestions:(id)arg1 {\n"
+        "    if (!IS_ENABLED(HideSearchHis)) {\n"
         "        %orig;\n"
         "    }\n"
         "}"
