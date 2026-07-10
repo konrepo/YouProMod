@@ -392,16 +392,16 @@ file.write_text(text)
 print("Patched Download menu")
 PY
 
-file.write_text(text)
-print("Patched Download menu")
-PY
-
 echo "==> Fix YouMod Logos %orig calls"
 
 python3 <<'PY'
 from pathlib import Path
 
-for path in Path("YouMod/Files").glob("*.x"):
+root = Path("YouMod/Files")
+if not root.exists():
+    raise SystemExit("Missing YouMod/Files")
+
+for path in root.glob("*.x"):
     text = path.read_text()
     original = text
 
