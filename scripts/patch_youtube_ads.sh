@@ -19,6 +19,13 @@ text = file.read_text()
 text = text.replace("%orig(nil);", "%orig;")
 text = text.replace("%orig(context);", "%orig;")
 
+text = text.replace(
+    "- (void)decorateContext:(id)context { %orig; }",
+    "- (void)decorateContext:(id)context {\n"
+    "    %orig;\n"
+    "}"
+)
+
 # 1. Remove fragile UI-level hiding (causes white gaps)
 as_hook = '''%hook _ASDisplayView
 - (void)didMoveToWindow {
