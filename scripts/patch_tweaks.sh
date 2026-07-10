@@ -439,6 +439,21 @@ for path in Path("YouMod/Files").glob("*.x"):
         text
     )
 
+    # Fix one-line void ternary with normal call : %orig
+    text = re.sub(
+        r'- \(void\)([^{]+)\{ ([^?;{}]+?) \? (.*?) : %orig; \}',
+        lambda m: (
+            f'- (void){m.group(1)}{{\n'
+            f'    if ({m.group(2).strip()}) {{\n'
+            f'        {m.group(3).strip()};\n'
+            f'    }} else {{\n'
+            f'        %orig;\n'
+            f'    }}\n'
+            f'}}'
+        ),
+        text
+    )
+
     # Fix one-line void if: if (...) %orig;
     text = re.sub(
         r'- \(void\)([^{]+)\{ if \((.*?)\) %orig; \}',
@@ -464,7 +479,20 @@ for path in Path("YouMod/Files").glob("*.x"):
             f'}}'
         ),
         text
-    )    
+    )
+
+    # Fix statement ternary inside method body
+    text = re.sub(
+        r'(?m)^([ \t]+)([^;\n{}?]+?) \? %orig\((.*?)\) : %orig;',
+        lambda m: (
+            f'{m.group(1)}if ({m.group(2).strip()}) {{\n'
+            f'{m.group(1)}    %orig({m.group(3)});\n'
+            f'{m.group(1)}}} else {{\n'
+            f'{m.group(1)}    %orig;\n'
+            f'{m.group(1)}}}'
+        ),
+        text
+    )  
 
     if text != original:
         path.write_text(text)
