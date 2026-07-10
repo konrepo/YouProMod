@@ -403,10 +403,37 @@ for path in root.glob("*.x"):
     text = path.read_text()
     original = text
 
+    # Older Logos versions reject these forms
     text = text.replace("%orig(nil);", "%orig;")
     text = text.replace("%orig(context);", "%orig;")
 
-    path.write_text(text)
+    # Navbar.x
+    text = text.replace(
+        "- (void)setPremiumLogo:(BOOL)arg { IS_ENABLED(YTPremiumLogo) ? %orig(YES) : %orig; }",
+        "- (void)setPremiumLogo:(BOOL)arg {\n"
+        "    if (IS_ENABLED(YTPremiumLogo)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    # Feed.x
+    text = text.replace(
+        "- (void)setFeedHeaderScrollMode:(int)arg1 { IS_ENABLED(HideSubbar) ? %orig(0) : %orig; }",
+        "- (void)setFeedHeaderScrollMode:(int)arg1 {\n"
+        "    if (IS_ENABLED(HideSubbar)) {\n"
+        "        %orig(0);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    if text != original:
+        path.write_text(text)
+        print(f"Patched {path}")
 
     if path.name in ["Feed.x", "Navbar.x"]:
         print(f"==> {path}")
