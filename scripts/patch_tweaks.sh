@@ -392,6 +392,10 @@ file.write_text(text)
 print("Patched Download menu")
 PY
 
+echo "==> Check risky Logos %orig syntax"
+grep -RIn "? %orig" YouMod/Files/*.x || true
+grep -RIn "if (!IS_ENABLED.*%orig" YouMod/Files/*.x || true
+
 [ -f scripts/patch_youtube_ads.sh ] || { echo "Missing patch_youtube_ads.sh"; exit 1; }
 bash scripts/patch_youtube_ads.sh
 
