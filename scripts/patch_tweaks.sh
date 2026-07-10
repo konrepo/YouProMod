@@ -392,7 +392,6 @@ file.write_text(text)
 print("Patched Download menu")
 PY
 
-...
 file.write_text(text)
 print("Patched Download menu")
 PY
