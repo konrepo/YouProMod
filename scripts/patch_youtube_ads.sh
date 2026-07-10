@@ -16,10 +16,7 @@ if not file.is_file():
 text = file.read_text()
 
 # Fix invalid Logos %orig(nil)
-text = text.replace(
-    "- (void)decorateContext:(id)context { %orig(nil); }",
-    "- (void)decorateContext:(id)context { %orig(context); }"
-)
+text = text.replace("%orig(nil);", "%orig(context);")
 
 # 1. Remove fragile UI-level hiding (causes white gaps)
 as_hook = '''%hook _ASDisplayView
@@ -147,7 +144,7 @@ section_hook = r'''
 
     [contentsArray removeObjectsAtIndexes:removeIndexes];
 
-    %orig;
+    %orig(model);
 }
 
 %end
@@ -155,6 +152,15 @@ section_hook = r'''
 
 if "%hook YTSectionListViewController" not in text:
     text += "\n" + section_hook
+
+if "%orig(nil)" in text:
+    print("ERROR: %orig(nil) still exists")
+    exit(1)
+
+# Debug: show final %orig lines
+for i, line in enumerate(text.splitlines(), start=1):
+    if "%orig" in line:
+        print(f"{i}: {line}")
 
 file.write_text(text)
 print("Patched YouMod Ads")
