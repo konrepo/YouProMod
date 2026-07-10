@@ -16,7 +16,8 @@ if not file.is_file():
 text = file.read_text()
 
 # Fix invalid Logos %orig(nil)
-text = text.replace("%orig(nil);", "%orig(context);")
+text = text.replace("%orig(nil);", "%orig;")
+text = text.replace("%orig(context);", "%orig;")
 
 # 1. Remove fragile UI-level hiding (causes white gaps)
 as_hook = '''%hook _ASDisplayView
