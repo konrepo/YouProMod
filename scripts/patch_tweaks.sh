@@ -468,6 +468,16 @@ for path in root.glob("*.x"):
         "}"
     )
 
+    text = text.replace(
+        "- (id)activeCache { return IS_ENABLED(HideSearchHis) ? nil : %orig; }",
+        "- (id)activeCache {\n"
+        "    if (IS_ENABLED(HideSearchHis)) {\n"
+        "        return nil;\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )    
+
     # Player.x
     text = text.replace(
         "- (void)setPreviousButtonHidden:(BOOL)arg { IS_ENABLED(HidePrevButton) ? %orig(YES) : %orig; }",
