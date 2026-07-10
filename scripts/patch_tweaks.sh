@@ -510,6 +510,15 @@ for path in root.glob("*.x"):
     )
 
     text = text.replace(
+        "    IS_ENABLED(AlwaysShowRemaining) ? %orig(YES) : %orig;",
+        "    if (IS_ENABLED(AlwaysShowRemaining)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }"
+    )
+
+    text = text.replace(
         "- (void)setStartPlayback:(BOOL)arg1 { IS_ENABLED(StopAutoplayVideo) ? %orig(NO) : %orig; }",
         "- (void)setStartPlayback:(BOOL)arg1 {\n"
         "    if (IS_ENABLED(StopAutoplayVideo)) {\n"
@@ -540,7 +549,7 @@ for path in root.glob("*.x"):
         "        %orig;\n"
         "    }\n"
         "}"
-    )   
+    )  
 
     if text != original:
         path.write_text(text)
