@@ -85,7 +85,7 @@ jobs:
       - name: Clone fresh Theos
         run: |
           rm -rf theos
-          git clone --quiet --depth=1 --recurse-submodules https://github.com/theos/theos.git
+          git clone --quiet --depth=1 --recurse-submodules https://github.com/roothide/theos.git
 
       - name: Cache iOS SDK
         id: cache-sdk
