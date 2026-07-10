@@ -82,18 +82,10 @@ jobs:
           echo "$(brew --prefix make)/libexec/gnubin" >> "$GITHUB_PATH"
           echo "THEOS=${{ github.workspace }}/theos" >> "$GITHUB_ENV"
 
-      - name: Cache Theos
-        id: cache-theos
-        uses: actions/cache@v4
-        with:
-          path: theos
-          key: ${{ runner.os }}-theos-v3
-          restore-keys: |
-            ${{ runner.os }}-theos-
-
-      - name: Clone Theos
-        if: steps.cache-theos.outputs.cache-hit != 'true'
-        run: git clone --quiet --depth=1 --recurse-submodules https://github.com/theos/theos.git
+      - name: Clone fresh Theos
+        run: |
+          rm -rf theos
+          git clone --quiet --depth=1 --recurse-submodules https://github.com/theos/theos.git
 
       - name: Cache iOS SDK
         id: cache-sdk
@@ -138,9 +130,9 @@ jobs:
             tweaks/KhmerTopButton
             tweaks/YouPro*.dylib
             tweaks/YouProb2LangFix
-          key: ${{ runner.os }}-youpromod-v78-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
+          key: ${{ runner.os }}-youpromod-v79-${{ hashFiles('tweak_hashes.txt', '.github/workflows/main.yml', 'scripts/*.sh') }}
           restore-keys: |
-            ${{ runner.os }}-youpromod-v78-
+            ${{ runner.os }}-youpromod-v79-
 
       - name: Clone tweak repositories
         run: bash scripts/clone_tweaks.sh
