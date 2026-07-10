@@ -452,7 +452,95 @@ for path in root.glob("*.x"):
         "        %orig;\n"
         "    }\n"
         "}"
-    )    
+    )
+
+    text = text.replace(
+        "- (void)showEndscreenControlsInPlayerBar:(BOOL)arg { IS_ENABLED(HideSuggestedVideo) ? %orig(NO) : %orig; }",
+        "- (void)showEndscreenControlsInPlayerBar:(BOOL)arg {\n"
+        "    if (IS_ENABLED(HideSuggestedVideo)) {\n"
+        "        %orig(NO);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setBackgroundVisible:(BOOL)arg1 isGradientBackground:(BOOL)arg2 { IS_ENABLED(RemoveDarkOverlay) ? %orig(NO, arg2) : %orig; }",
+        "- (void)setBackgroundVisible:(BOOL)arg1 isGradientBackground:(BOOL)arg2 {\n"
+        "    if (IS_ENABLED(RemoveDarkOverlay)) {\n"
+        "        %orig(NO, arg2);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setWatermarkEnabled:(BOOL)arg { IS_ENABLED(HideWaterMark) ? %orig(NO) : %orig; }",
+        "- (void)setWatermarkEnabled:(BOOL)arg {\n"
+        "    if (IS_ENABLED(HideWaterMark)) {\n"
+        "        %orig(NO);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setHidden:(BOOL)arg1 { IS_ENABLED(HideEndScreenCards) ? %orig(YES) : %orig; }",
+        "- (void)setHidden:(BOOL)arg1 {\n"
+        "    if (IS_ENABLED(HideEndScreenCards)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setHoverCardHidden:(BOOL)arg { IS_ENABLED(HideEndScreenCards) ? %orig(YES) : %orig; }",
+        "- (void)setHoverCardHidden:(BOOL)arg {\n"
+        "    if (IS_ENABLED(HideEndScreenCards)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setStartPlayback:(BOOL)arg1 { IS_ENABLED(StopAutoplayVideo) ? %orig(NO) : %orig; }",
+        "- (void)setStartPlayback:(BOOL)arg1 {\n"
+        "    if (IS_ENABLED(StopAutoplayVideo)) {\n"
+        "        %orig(NO);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setPlayerBarAlpha:(CGFloat)alpha { IS_ENABLED(AlwaysShowSeekbar) ? %orig(1.0) : %orig; }",
+        "- (void)setPlayerBarAlpha:(CGFloat)alpha {\n"
+        "    if (IS_ENABLED(AlwaysShowSeekbar)) {\n"
+        "        %orig(1.0);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setHintsDisabled:(BOOL)arg1 { IS_ENABLED(DisableHints) ? %orig(YES) : %orig; }",
+        "- (void)setHintsDisabled:(BOOL)arg1 {\n"
+        "    if (IS_ENABLED(DisableHints)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )   
 
     if text != original:
         path.write_text(text)
