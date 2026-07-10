@@ -452,6 +452,20 @@ for path in Path("YouMod/Files").glob("*.x"):
         text
     )
 
+    # Fix one-line return ternary where false side is %orig
+    text = re.sub(
+        r'- \(([^)]+)\)([^{]+)\{ return ([^?;{}]+?) \? (.*?) : %orig; \}',
+        lambda m: (
+            f'- ({m.group(1)}){m.group(2)}{{\n'
+            f'    if ({m.group(3).strip()}) {{\n'
+            f'        return {m.group(4).strip()};\n'
+            f'    }}\n'
+            f'    return %orig;\n'
+            f'}}'
+        ),
+        text
+    )    
+
     if text != original:
         path.write_text(text)
         print(f"Patched {path}")
