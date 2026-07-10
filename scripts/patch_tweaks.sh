@@ -398,20 +398,21 @@ python3 <<'PY'
 from pathlib import Path
 
 root = Path("YouMod/Files")
-if not root.exists():
-    raise SystemExit("Missing YouMod/Files")
 
 for path in root.glob("*.x"):
     text = path.read_text()
     original = text
 
-    # Older Logos versions reject these forms
     text = text.replace("%orig(nil);", "%orig;")
     text = text.replace("%orig(context);", "%orig;")
 
-    if text != original:
-        path.write_text(text)
-        print(f"Patched {path}")
+    path.write_text(text)
+
+    if path.name in ["Feed.x", "Navbar.x"]:
+        print(f"==> {path}")
+        for i, line in enumerate(text.splitlines(), start=1):
+            if "%orig" in line:
+                print(f"{i}: {line}")
 PY
 
 [ -f scripts/patch_youtube_ads.sh ] || { echo "Missing patch_youtube_ads.sh"; exit 1; }
