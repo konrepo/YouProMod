@@ -110,7 +110,7 @@ element_hook = r'''
         return nil;
     }
 
-    return %orig;
+    return %orig();
 }
 
 %end
