@@ -573,6 +573,87 @@ for path in root.glob("*.x"):
         "    }\n"
         "}"
     )
+    
+    # Apperence.x
+    text = text.replace(
+        "- (UIColor *)baseBackground { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)baseBackground {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)brandBackgroundSolid { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)brandBackgroundSolid {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)brandBackgroundPrimary { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)brandBackgroundPrimary {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)brandBackgroundSecondary { return self.pageStyle == 1 ? [[UIColor blackColor] colorWithAlphaComponent:0.9] : %orig; }",
+        "- (UIColor *)brandBackgroundSecondary {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [[UIColor blackColor] colorWithAlphaComponent:0.9];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)raisedBackground { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)raisedBackground {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)staticBrandBlack { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)staticBrandBlack {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)generalBackgroundA { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)generalBackgroundA {\n"
+        "    if (self.pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (UIColor *)backgroundColor:(NSInteger)pageStyle { return pageStyle == 1 ? [UIColor blackColor] : %orig; }",
+        "- (UIColor *)backgroundColor:(NSInteger)pageStyle {\n"
+        "    if (pageStyle == 1) {\n"
+        "        return [UIColor blackColor];\n"
+        "    }\n"
+        "    return %orig;\n"
+        "}"
+    )
 
     if text != original:
         path.write_text(text)
