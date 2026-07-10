@@ -431,6 +431,29 @@ for path in root.glob("*.x"):
         "}"
     )
 
+    # Player.x
+    text = text.replace(
+        "- (void)setPreviousButtonHidden:(BOOL)arg { IS_ENABLED(HidePrevButton) ? %orig(YES) : %orig; }",
+        "- (void)setPreviousButtonHidden:(BOOL)arg {\n"
+        "    if (IS_ENABLED(HidePrevButton)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )
+
+    text = text.replace(
+        "- (void)setNextButtonHidden:(BOOL)arg { IS_ENABLED(HideNextButton) ? %orig(YES) : %orig; }",
+        "- (void)setNextButtonHidden:(BOOL)arg {\n"
+        "    if (IS_ENABLED(HideNextButton)) {\n"
+        "        %orig(YES);\n"
+        "    } else {\n"
+        "        %orig;\n"
+        "    }\n"
+        "}"
+    )    
+
     if text != original:
         path.write_text(text)
         print(f"Patched {path}")
