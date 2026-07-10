@@ -392,6 +392,29 @@ file.write_text(text)
 print("Patched Download menu")
 PY
 
+...
+file.write_text(text)
+print("Patched Download menu")
+PY
+
+echo "==> Fix YouMod Logos %orig calls"
+
+python3 <<'PY'
+from pathlib import Path
+
+for path in Path("YouMod/Files").glob("*.x"):
+    text = path.read_text()
+    original = text
+
+    # Older Logos versions reject these forms
+    text = text.replace("%orig(nil);", "%orig;")
+    text = text.replace("%orig(context);", "%orig;")
+
+    if text != original:
+        path.write_text(text)
+        print(f"Patched {path}")
+PY
+
 [ -f scripts/patch_youtube_ads.sh ] || { echo "Missing patch_youtube_ads.sh"; exit 1; }
 bash scripts/patch_youtube_ads.sh
 
